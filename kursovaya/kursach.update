@@ -24,7 +24,7 @@ struct tm parseDate(char *str); // перевод даты во временно
 
 void printCurrentDate(char** arr, int n); // первая функция - вывод предложений с текущим месяцем и годом
 
-void minAndMaxData(struct Sentences* ptr, int n); // вывод максимальной и минимальной дат
+void minAndMaxData(char** arr, int n, struct Sentences* ptr); // вывод максимальной и минимальной дат
 
 //time_t* viktorianDates(); вычисление временных штампов для диапазона девятнадцатаго века
 
@@ -56,15 +56,6 @@ int main(){
     //удалил повторяющиеся предложения, работаю со структурой
     struct Sentences text;
     struct Sentences* pointer = malloc(n*sizeof(struct Sentences));
-    for(int i = 0; i < n; i++){
-        pointer[i].sentence = arr[i];
-    }
-    //вторая функция
-    //minAndMaxData(pointer, n);
-    //for(int i = 0; i < n; i++){
-    //	printf("[%s]\n", pointer[i].maximalData);
-    //}
-    //deleterViktorians(arr, &n);
     /*---------------------------------------------------*/
     printf("\n\n\tЗдравствуйте! Вы можете выбрать следующие функции: 1 - вывод предложений с текущим месяцем и годом. 2 - сортировка предложений по увеличению минимальной даты. 3 - удаление предложений, состоящих из дат 19го века, 4 - вывод минимальной и максимальной дат для каждого предложения.\n\n");
     int operationSelect;
@@ -85,18 +76,12 @@ int main(){
 		break;
 	case 4:
 		printf("Выбрана функция вывода минимальной и максимальной дат для каждого предложения.\n\n");
-		minAndMaxData(pointer, n);
+		minAndMaxData(arr, n, pointer);
 		break;
 	default:
 		printf("Функция выбрана неправильно. Попробуйте снова.\n\n");
 		return 0;	
     }
-    /*
-    printf("\n\n---------------------------------------------\n");//вывод текста через массив
-    for(int i = 0; i<n; i++){
-        printf("|\t\t\t[%s]\t\t\t\t\t|\n", arr[i]);
-    }
-    */
     for(int i = 0; i < n; i++){//очистка памяти
         free(arr[i]);
     }
@@ -197,7 +182,10 @@ void printCurrentDate(char** arr, int n)
     }
 }
 
-void minAndMaxData(struct Sentences *ptr, int n) {
+void minAndMaxData(char** arr, int n, struct Sentences* ptr){
+    for(int i = 0; i < n; i++){       //заполнение структуры
+        ptr[i].sentence = arr[i];
+    }	
     int sentenceLength;
     for(int i = 0; i < n; i++){
         int indexOfMinimal = 0, indexOfMaximal = 0;
@@ -242,7 +230,7 @@ void minAndMaxData(struct Sentences *ptr, int n) {
         strcpy((ptr + i) -> maximalData, arraySentences[indexOfMaximal]);
     }
     for(int i = 0; i < n; i++){
-    	printf("[%s] -  {%s} -  {%s}\n\n", (ptr+i)->sentence, (ptr+i)->minimalData, (ptr+i)->maximalData );
+    	printf("Предложение: %s Минимальная дата: %s. Максимальная дата: %s\n\n", (ptr+i)->sentence, (ptr+i)->minimalData, (ptr+i)->maximalData );
     }
 }
 
