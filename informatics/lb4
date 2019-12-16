@@ -1,0 +1,62 @@
+class Node:
+    def __init__(self, data, prev=None, next=None):
+        self.__data = data
+        self.__prev__ = prev
+        self.__next__ = next
+
+    def get_data(self):
+        return self.__data
+
+    def __str__(self):
+        return "data: {}, prev: {}, next: {}".format(self.__data, self.__prev__, self.__next__)
+
+class LinkedList(list):
+    __length = 0
+    __last__ = None
+    __first__ = None
+
+    def __init__(self, first = None, last = None):
+        if first == None and last != None:
+            raise ValueError("invalid value for last")
+        elif first != None and last == None:
+            self.__last__ = Node(first)
+            self.__first__ = self.__last__
+            self.__length = 1
+        elif first != None and last != None:
+            self.__first__ = Node(first, None, self.__last__)
+            self.__last__ = Node(last, self.__first__)
+            self.__length = 2
+
+    def __len__(self):
+        return self.__length
+
+    def append(self, element):
+        if self.__length > 0:
+            i = Node(element, self.__last__)
+            self.__last__ = i
+        else:
+            a = Node(element)
+            self.__last__ = a
+            self.__length += 1
+
+
+    def __str__(self):
+        a = str()
+        if self.__length == 0:
+            return "LinkedList[]"
+        else:
+            a = "LinkedList[length = " + str(self.__length) + ", ["
+            for i in range(self.__length):
+                a = a + str(self.__last__)
+                self.__last__ = self.__last__.__next__
+            a = a + "]]"
+            return a
+ 
+    
+   # def pop(self):
+    #    if self.__length == 0:
+     #       raise IndexError("LinkedList is empty")
+      #  else:
+a = LinkedList()
+print(len(a))
+            
