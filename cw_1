@@ -209,51 +209,63 @@ void minAndMaxData(char** arr, int n){
         ptr[i].sentence = arr[i];
     }	
     int sentenceLength;
+    char* sentence;
+    int countOfWords = 0;
+    char** arraySentences;
     for(int i = 0; i < n; i++){
         int indexOfMinimal = 0, indexOfMaximal = 0;
-        int countOfWords = 0;
         sentenceLength = strlen((ptr + i)->sentence);
-        for(int k = 0; k < sentenceLength; k++) {
+        for(int k = 0; k < sentenceLength; k++){
             if (((ptr + i)->sentence[k] == ' ') || ((ptr+i)->sentence[k] == '.')){
                 countOfWords++;
             }
         }
-       	char buf[sentenceLength];
-       	strcpy(buf, (ptr+i)->sentence);
-        char** arraySentences = malloc(countOfWords*sizeof(char*));
-        for(int k = 0; k < countOfWords; k++){
-            arraySentences[k] = malloc(11*sizeof(char));
-        }
-        arraySentences[0] = strtok(buf, " .");
-        for(int k = 1; k < countOfWords; k++){
-            arraySentences[k] = strtok(NULL, " .");
-        }
-        time_t times[countOfWords];
-        for(int k = 0; k < countOfWords; k++){
-            struct tm dateTime;
-       	    dateTime = parseDate(arraySentences[k]);
-            time_t timeOfDate = mktime(&dateTime);
-            times[k] = timeOfDate;
-       	}
-       	time_t MIN = times[0];
-       	time_t MAX = times[0];
-       	for(int k = 1; k < countOfWords; k++){
-      		if(times[k] < MIN){
-               		MIN = times[k];
-               		indexOfMinimal = k;
-      		}
-       		if(times[k] > MAX){
-               		MAX = times[k];
-               		indexOfMaximal = k;
-       		}
-      	}
-       	(ptr+i)->minTime = MIN;
-       	strcpy((ptr + i) -> minimalData, arraySentences[indexOfMinimal]);
-       	strcpy((ptr + i) -> maximalData, arraySentences[indexOfMaximal]);
+	if(countOfWords < 2){
+		printf("Предложение: %s Минимальная и максимальная дата: %s\n\n", (ptr+i)->sentence, (ptr+i)->sentence);
+	}else{
+       		char buf[sentenceLength];
+	       	strcpy(buf, (ptr+i)->sentence);
+	        arraySentences = (char**)malloc(countOfWords*sizeof(char*));
+	        for(int k = 0; k < countOfWords; k++){
+	            arraySentences[k] = malloc(12*sizeof(char));
+	        }
+	        sentence = strtok(buf, " .");
+		strcpy(arraySentences[0], sentence);
+	        for(int k = 1; k < countOfWords; k++){
+	            sentence = strtok(NULL, " .");
+		    strcpy(arraySentences[k], sentence);
+	        }
+	        time_t times[countOfWords];
+	        for(int k = 0; k < countOfWords; k++){
+	            struct tm dateTime;
+	       	    dateTime = parseDate(arraySentences[k]);
+	            time_t timeOfDate = mktime(&dateTime);
+	            times[k] = timeOfDate;
+	       	}
+	       	time_t MIN = times[0];
+	       	time_t MAX = times[0];
+	       	for(int k = 1; k < countOfWords; k++){
+	      		if(times[k] < MIN){
+	               		MIN = times[k];
+	               		indexOfMinimal = k;
+	      		}
+	       		if(times[k] > MAX){
+	               		MAX = times[k];
+	               		indexOfMaximal = k;
+	       		}
+	      	}
+	       	strcpy((ptr + i) -> minimalData, arraySentences[indexOfMinimal]);
+	       	strcpy((ptr + i) -> maximalData, arraySentences[indexOfMaximal]);
+		printf("Предложение: %s Минимальная дата: %s. Максимальная дата: %s.\n\n", (ptr+i)->sentence, (ptr+i)->minimalData, (ptr+i)->maximalData);
+		/*
+		for(int a = 0; a < countOfWords; a++){
+			free(arraySentences[a]);
+		}
+		free(arraySentences)
+		*/
+	}	
     }
-    for(int k = 0; k < n; k++){
-    	printf("Предложение: %s Минимальная дата: %s. Максимальная дата: %s.\n\n", (ptr+k)->sentence, (ptr+k)->minimalData, (ptr+k)->maximalData);
-    }
+    free(ptr);
 }
 
 int searchViktorian(char* sentence){
@@ -276,12 +288,15 @@ int searchViktorian(char* sentence){
 		}
 	}
 	char** arrayOfDates = malloc(countOfWords*sizeof(char*));
+	char* sent;
         for(int k = 0; k < countOfWords; k++){
-               	arrayOfDates[k] = malloc(11*sizeof(char));
+               	arrayOfDates[k] = malloc(12*sizeof(char));
         }
-	arrayOfDates[0] = strtok(buf, " .");
+	sent = strtok(buf, " .");
+	strcpy(arrayOfDates[0], sent);
 	for(int k = 1; k < countOfWords; k++){
-		arrayOfDates[k] = strtok(NULL, " .");
+		sent = strtok(NULL, " .");
+		strcpy(arrayOfDates[k], sent);
 	}
 	time_t times[countOfWords];
         for(int k = 0; k < countOfWords; k++){
@@ -297,14 +312,21 @@ int searchViktorian(char* sentence){
 		}
 	}
 	if(counter == countOfWords){
+		for(int i = 0; i < countOfWords; i++){
+			free(arrayOfDates[i]);
+		}
+		free(arrayOfDates);
 		return 1;
 	}else{
+		for(int i = 0; i < countOfWords; i++){
+			free(arrayOfDates[i]);
+		}
+		free(arrayOfDates);
 		return 0;
 	}	
 }
 
 void deleterViktorians(char** arr, int* n){
-	printf("\n\n");
 	int u = 0;
 	while(u < *n){
 		if(searchViktorian(arr[u]) == 1){
@@ -339,6 +361,7 @@ void sorting(char** array, int n){
 	for(int k = 0; k < n; k++){
 		array[k] = ptr[k].sentence;
         }
+	free(ptr);
 }
 
 void minDataField(struct SentencesCut* ptr, int n){
