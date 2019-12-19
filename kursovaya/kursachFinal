@@ -1,0 +1,387 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+struct Sentences{ //структура текста
+    char* sentence;
+    time_t minTime;
+    time_t maxTime;
+    char minimalData[11];
+    char maximalData[11];
+};
+
+struct SentencesCut{
+    char* sentence;
+    time_t minTime;
+};
+
+char* ReadSentence(); //считывание предложения
+
+char** WriteText(int *n);
+
+char* DelProbel(char* s); // удаление пробела и табуляции в начале предложения
+
+int DoubleSentence(char** arr, int* n); // удаление повторяющихся предложений
+
+struct tm parseDate(char *str); // перевод даты во временной штамп
+
+void printCurrentDate(char** arr, int n); // первая функция - вывод предложений с текущим месяцем и годом
+
+void minAndMaxData(char** arr, int n, struct Sentences* ptr); // вывод максимальной и минимальной дат
+
+int searchViktorian(char* sentence); // поиск предложения с викторианскими датами
+
+void deleterViktorians(char** arr, int* n); // удаление предложений с викторианскими датами
+
+int comparator(const void* a, const void* b); //компаратор для сортировки
+
+void sorting(char** arr , int n); // сортировка
+
+void minDataField(struct SentencesCut* ptr, int n);
+
+int main(){
+    int n = 0;	
+    char** arrayOfSentences = WriteText(&n);
+    DoubleSentence(arrayOfSentences, &n);
+    struct Sentences* pointer = malloc(n*sizeof(struct Sentences));
+    /*---------------------------------------------------*/
+    int flag = 1;
+    while(flag){ 
+    	printf("\n\n\tЗдравствуйте! Вы можете выбрать следующие функции: 0 - завершить программу, 1 - вывод предложений с текущим месяцем и годом, 2 - сортировка предложений по увеличению минимальной даты, 3 - удаление предложений, состоящих из дат 19го века, 4 - вывод минимальной и максимальной дат для каждого предложения.\n\n");
+    	int operationSelect;
+    	scanf("%d", &operationSelect);
+    	printf("Выбрана функция: %d\n", operationSelect);
+    	switch(operationSelect){
+		case 0:
+			printf("\nЗавершение программы пользователем.\n\n");
+			flag = 0;
+			break;
+    		case 1:
+			printf("Выбрана функция вывода предложений, в которых есть дата с текущим годом и месяцем.\n\n");
+			printCurrentDate(arrayOfSentences, n);
+			break;
+		case 2:
+			printf("Выбрана функция сортировки предложений по увеличению минимальной даты.\n\n");
+			sorting(arrayOfSentences, n);
+			break;
+		case 3:
+			printf("Выбрана функция удаления предложений, которые состоят из дат 19го века.\n\n");
+			deleterViktorians(arrayOfSentences, &n);		
+			break;
+		case 4:
+			printf("Выбрана функция вывода минимальной и максимальной дат для каждого предложения.\n\n");
+			minAndMaxData(arrayOfSentences, n, pointer);
+			break;
+		default:
+			printf("Функция выбрана неправильно. Попробуйте снова.\n\n");
+			break;	
+    	}
+    }
+    for(int i = 0; i < n; i++){//очистка памяти
+        free(arrayOfSentences[i]);
+    }
+    free(arrayOfSentences);
+    return 0;
+}
+
+char* ReadSentence()
+{
+    char* s = malloc(12*sizeof(char));
+    int n = 0;
+    char c;
+    int size = 12;
+    while((c = getchar()) && c != '.' && c != '\n'){
+        if(n == (size-2)){
+            size += 12;
+            s = realloc(s, size);
+        }
+        s[n] = c;
+        ++n;
+    }
+    s[n] = c;
+    s[n+1] = '\0';
+    return s;
+}
+
+char* DelProbel(char* s)
+{
+    int i = 0;
+    int length = strlen(s);
+    if((s[0] == ' ') || (s[0] == '\t')){
+        while(i < length){
+            s[i] = s[i+1];
+            i++;
+        }
+    }
+    return s;
+}
+
+char** WriteText(int *n)
+{
+    char** arr = malloc(12*sizeof(char*));
+    int size = 12;
+    int m = 0;
+    char* s;//указатель на считываемое предложение
+    //считывание предложений
+    //----------------------------------------------
+    while(1){
+        s = ReadSentence();
+        if(strcmp(s, "\n") == 0){
+            break;
+        }
+        if(m == size -1) {
+            size += 12;
+            arr = realloc(arr, sizeof(char*)*size);
+        }
+        arr[m] = DelProbel(s);
+        m += 1;
+    }
+    *n = m;
+    return arr;    
+}
+
+int DoubleSentence(char** arr, int *n)
+{
+    int i = 0;
+    int length = 0;
+    length = *n;
+    while(i < length - 1){
+        for(int j = i + 1; j < length; j++){
+            if(strcmp(arr[i], arr[j]) == 0){
+                free(arr[j]);
+                for(int a = j; a < length - 1; a++){
+                    arr[a] = arr[a+1];
+                }
+                length--;
+                *n-=1;
+                j--;
+            }
+        }
+        i++;
+    }
+}
+
+struct tm parseDate(char *str)
+{
+    int year, mon, day;
+    sscanf(str, "%d/%d/%d", &day, &mon, &year);
+    struct tm time;
+    memset(&time, 0, sizeof(time));
+    time.tm_mon = mon - 1;
+    time.tm_mday = day;
+    time.tm_year = year - 1900;
+    time.tm_isdst = -1;
+    return time;
+}
+
+void printCurrentDate(char** arr, int n)//очистить память!!
+{
+    for(int i = 0; i < n; i++) {
+        char *buffer = calloc(strlen(arr[i]) + 1, sizeof(char));
+        strcpy(buffer, arr[i]);
+        char *istr;
+        istr = strtok(buffer, " ");
+        int count = 0;
+        struct tm data_input;
+        time_t now_time;
+        time(&now_time);
+        struct tm* data_now;
+        data_now = localtime(&now_time);
+        while(istr != NULL){
+            data_input = parseDate(istr);
+            if(data_input.tm_year == data_now->tm_year && data_input.tm_mon == data_now->tm_mon){
+                count++;
+            }
+            istr = strtok(NULL, " ");
+        }
+        if(count > 0){
+            printf("%s\n", arr[i]);
+        }
+    }
+}
+
+void minAndMaxData(char** arr, int n, struct Sentences* ptr){//закинуть массив структур и очистить там память, обработать случай с предложением из одного слова
+    for(int i = 0; i < n; i++){       //заполнение структуры
+        ptr[i].sentence = arr[i];
+    }	
+    int sentenceLength;
+    for(int i = 0; i < n; i++){
+        int indexOfMinimal = 0, indexOfMaximal = 0;
+        int countOfWords = 1;
+        sentenceLength = strlen((ptr + i)->sentence);
+        for(int k = 0; k < sentenceLength; k++) {
+            if ((ptr + i)->sentence[k] == ' '){
+                countOfWords++;
+            }
+        }
+       	char buf[sentenceLength];
+       	strcpy(buf, (ptr+i)->sentence);
+        char** arraySentences = malloc(countOfWords*sizeof(char*));
+        for(int k = 0; k < countOfWords; k++){
+            arraySentences[k] = malloc(11*sizeof(char));
+        }
+        arraySentences[0] = strtok(buf, " .");
+        for(int k = 1; k < countOfWords; k++){
+            arraySentences[k] = strtok(NULL, " .");
+        }
+        time_t times[countOfWords];
+        for(int k = 0; k < countOfWords; k++){
+            struct tm dateTime;
+       	    dateTime = parseDate(arraySentences[k]);
+            time_t timeOfDate = mktime(&dateTime);
+            times[k] = timeOfDate;
+       	}
+       	time_t MIN = times[0];
+       	time_t MAX = times[0];
+       	for(int k = 1; k < countOfWords; k++){
+      		if(times[k] < MIN){
+               		MIN = times[k];
+               		indexOfMinimal = k;
+      		}
+       		if(times[k] > MAX){
+               		MAX = times[k];
+               		indexOfMaximal = k;
+       		}
+      	}
+       	(ptr+i)->minTime = MIN;
+       	strcpy((ptr + i) -> minimalData, arraySentences[indexOfMinimal]);
+       	strcpy((ptr + i) -> maximalData, arraySentences[indexOfMaximal]);
+        }
+    for(int i = 0; i < n; i++){
+    	printf("Предложение: %s Минимальная дата: %s. Максимальная дата: %s\n\n", (ptr+i)->sentence, (ptr+i)->minimalData, (ptr+i)->maximalData );
+    }	
+}
+
+int searchViktorian(char* sentence){// поиск предложений с викторианскими датамиочистить память!!!
+	char* viktorianMin;//викторианский диапазон вычисление
+        viktorianMin = "31/12/1800";
+        char* viktorianMax;
+        viktorianMax = "01/01/1901";
+        struct tm vikMin = parseDate(viktorianMin);
+        struct tm vikMax = parseDate(viktorianMax);
+        time_t minimalViktorian = mktime(&vikMin);
+        time_t maximalViktorian = mktime(&vikMax);
+//--------------------------------------------------	
+	int sentenceLength;
+	int countOfWords = 0;
+	sentenceLength = strlen(sentence);
+	char buf[sentenceLength];//копия предложения
+	strcpy(buf, sentence);
+	for(int k = 0; k < sentenceLength; k++){
+		if((buf[k] == ' ') || (buf[k] == '.')){
+			countOfWords++;
+		}
+	}
+	//создание массива дат из предложения
+	char** arrayOfDates = malloc(countOfWords*sizeof(char*));
+        for(int k = 0; k < countOfWords; k++){
+               	arrayOfDates[k] = malloc(11*sizeof(char));
+        }
+	arrayOfDates[0] = strtok(buf, " .");
+	for(int k = 1; k < countOfWords; k++){
+		arrayOfDates[k] = strtok(NULL, " .");
+	}
+	//создание массива временных штампов, соответствующих каждой дате предложения
+	time_t times[countOfWords];
+        for(int k = 0; k < countOfWords; k++){
+        	struct tm dateTime;
+         	dateTime = parseDate(arrayOfDates[k]);
+            	time_t timeOfDate = mktime(&dateTime);
+            	times[k] = timeOfDate;
+        }
+	int counter = 0;
+	for(int m = 0; m < countOfWords; m++){
+		if((times[m] > minimalViktorian) && (times[m] < maximalViktorian)){
+			counter++;
+		}
+	}
+	if(counter == countOfWords){
+		return 1;
+	}else{
+		return 0;
+	}	
+}
+
+void deleterViktorians(char** arr, int* n){
+	printf("\n\n");
+	int u = 0;
+	while(u < *n){
+		if(searchViktorian(arr[u]) == 1){
+			free(arr[u]);
+			for(int k = u + 1; k < *n; k++){
+				arr[k-1] = arr[k];
+			}	
+			*n-=1;
+		}else{
+			u++;
+		}
+	}	
+	for(int i = 0; i < *n; i++){
+		printf("%s\n", arr[i]);
+	}
+}
+
+int comparator(const void* a, const void* b){
+	if( (((struct SentencesCut*)a)->minTime) < (((struct SentencesCut*)b)->minTime) ) return -1;
+	if( (((struct SentencesCut*)a)->minTime) == (((struct SentencesCut*)b)->minTime) ) return 0;
+	if( (((struct SentencesCut*)a)->minTime) > (((struct SentencesCut*)b)->minTime) ) return 1;	
+}
+
+void sorting(char** array, int n){//очистить память структуры
+	struct SentencesCut* ptr = calloc(n, sizeof(struct SentencesCut));
+	for(int i = 0; i < n; i++){
+		ptr[i].sentence = calloc((strlen(array[i]) + 2), sizeof(char));
+		strcpy(ptr[i].sentence, array[i]);
+	}
+	for(int k = 0; k < n; k++){
+		printf("[%s]\n", ptr[k].sentence);
+	}
+	printf("\n\n");
+	minDataField(ptr, n);
+	qsort(ptr, n, sizeof(struct SentencesCut), comparator);
+	for(int i = 0; i < n; i++){
+		free(array[i]);
+	}
+	for(int k = 0; k < n; k++){
+		array[k] = ptr[k].sentence;
+                printf("%s\n", array[k]);
+        }
+}
+
+void minDataField(struct SentencesCut* ptr, int n){//очистить память
+    int sentenceLength;
+    for(int i = 0; i < n; i++){
+        int countOfWords = 0;
+	sentenceLength = strlen((ptr+i)->sentence);
+	for(int k = 0; k < sentenceLength; k++){
+            if(((ptr+i)->sentence[k] == ' ') || ((ptr+i)->sentence[k] == '.')){
+                countOfWords++;
+            }
+        }
+        char buf[sentenceLength];
+        strcpy(buf, (ptr+i)->sentence);
+        char** arraySentences = malloc(countOfWords*sizeof(char*));
+        for(int k = 0; k < countOfWords; k++){
+            arraySentences[k] = malloc(11*sizeof(char));
+        }
+        arraySentences[0] = strtok(buf, " .");
+        for(int k = 1; k < countOfWords; k++){
+            arraySentences[k] = strtok(NULL, " .");
+        }
+        time_t times[countOfWords];
+        for(int k = 0; k < countOfWords; k++){
+            struct tm dateTime;
+            dateTime = parseDate(arraySentences[k]);
+            time_t timeOfDate = mktime(&dateTime);
+            times[k] = timeOfDate;
+        }
+        time_t MIN = times[0];
+        for(int k = 0; k < countOfWords; k++){
+                if(times[k] < MIN){
+                        MIN = times[k];
+                }
+        }
+        (ptr+i)->minTime = MIN;
+    }
+}    
