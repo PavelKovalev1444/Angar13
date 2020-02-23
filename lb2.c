@@ -120,6 +120,8 @@ MusicalComposition* createMusicalCompositionList(char** array_names, char** arra
     for(int i = 0; i < n; i++){
         tmp->next = (struct MusicalComposition*)malloc(sizeof(struct MusicalComposition));
         tmp->next->next = NULL;
+        tmp->next->prev = tmp;
+        tmp = tmp->next
     }
     for(int i =0; i < n; i++){
         
