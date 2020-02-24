@@ -113,18 +113,67 @@ MusicalComposition* createMusicalComposition(char* name, char* autor,int year)
 }
 
 MusicalComposition* createMusicalCompositionList(char** array_names, char** array_authors, int* array_years, int n){
-    struct MusicalComposition* head = malloc(sizeof(struct MusicalComposition));
-    struct MusicalComposition* tmp = malloc(sizeof(struct MusicalComposition));
+    struct MusicalComposition* head = createMusicalComposition(array_names[0], array_auhors[0], arrau_years[0]);
+    struct MusicalComposition* tmp = createMusicalComposition(array_names[1], array_auhors[1], arrau_years[1]);
     head -> next = tmp;
+    head -> prev = NULL;
     tmp -> prev = head;
-    for(int i = 0; i < n; i++){
-        tmp->next = (struct MusicalComposition*)malloc(sizeof(struct MusicalComposition));
+    for(int i = 2; i < n; i++){
+        tmp->next = createMusicalComposition(array_names[i], array_auhors[i], arrau_years[i]);
         tmp->next->next = NULL;
         tmp->next->prev = tmp;
         tmp = tmp->next
     }
-    for(int i =0; i < n; i++){
-        
+    return head;
+}
+
+void push(MusicalComposition*  head, MusicalComposition* element)
+{
+    struct MusicalComposition* tmp;
+    element -> next == NULL;
+    tmp = head;
+    while(tmp != NULL){
+        tmp = tmp->next;
     }
-    return musComp;
+    tmp->next = element;
+    element->prev == tmp;
+}
+
+void removeEl(MusicalComposition* head, char* name_for_remove)
+{
+    struct MusicalComposition* lst;
+    lst = head;
+    while(strcmp(lst->name, name_for_remove) != 0){
+        lst = lst->next;
+    }
+    struct MusicalComposition* prev, *next;
+    prev = lst->prev;
+    next = lst->next;
+    if (prev != NULL){
+        prev->next = lst->next;
+    }    
+    if (next != NULL){
+        next->prev = lst->prev;
+    }
+    free(lst);
+}
+
+int count(MusicalComposition* head){
+    struct MusicalComposition* tmp;
+    tmp = head;
+    int a;
+    while(tmp){
+        a++;
+        tmp = tmp->next;
+    }
+    return a;
+}
+
+void print_names(MusicalComposition*  head)
+{
+    struct MusicalComposition* tmp = head;
+    while(tmp != NULL){
+        printf("%s\n", tmp->name);
+        tmp = tmp->next;
+    }
 }
