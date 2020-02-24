@@ -4,13 +4,13 @@
 
 
 // Описание структуры MusicalComposition
-struct MusicalComposition{
+typedef struct MusicalComposition{
     char name[80];
     char author[80];
     int year;
     struct MusicalComposition* next;
     struct MusicalComposition* prev;
-};
+}MusicalComposition;
 
 // Создание структуры MusicalComposition
 
@@ -113,16 +113,16 @@ MusicalComposition* createMusicalComposition(char* name, char* autor,int year)
 }
 
 MusicalComposition* createMusicalCompositionList(char** array_names, char** array_authors, int* array_years, int n){
-    struct MusicalComposition* head = createMusicalComposition(array_names[0], array_auhors[0], arrau_years[0]);
-    struct MusicalComposition* tmp = createMusicalComposition(array_names[1], array_auhors[1], arrau_years[1]);
+    struct MusicalComposition* head = createMusicalComposition(array_names[0], array_authors[0], array_years[0]);
+    struct MusicalComposition* tmp = createMusicalComposition(array_names[1], array_authors[1], array_years[1]);
     head -> next = tmp;
     head -> prev = NULL;
     tmp -> prev = head;
     for(int i = 2; i < n; i++){
-        tmp->next = createMusicalComposition(array_names[i], array_auhors[i], arrau_years[i]);
+        tmp->next = createMusicalComposition(array_names[i], array_authors[i], array_years[i]);
         tmp->next->next = NULL;
         tmp->next->prev = tmp;
-        tmp = tmp->next
+        tmp = tmp->next;
     }
     return head;
 }
@@ -162,7 +162,7 @@ int count(MusicalComposition* head){
     struct MusicalComposition* tmp;
     tmp = head;
     int a;
-    while(tmp){
+    while(tmp != NULL){
         a++;
         tmp = tmp->next;
     }
