@@ -1,0 +1,285 @@
+void rotRec90Deg(struct Png* image, int x0, int y0, int x1, int y1){
+	int xc = (x1 - x0)/2 + x0;
+	int yc = (y1 - y0)/2 + y0;
+	int dx = x1 - x0;
+	int dy = y1 - y0;
+		
+	int pixelSize = 4;
+
+	if (png_get_color_type(image->png_ptr, image->info_ptr) == PNG_COLOR_TYPE_RGB){
+                pixelSize = 3;
+     	}
+
+	png_bytep* matrix = malloc(dx*sizeof(png_bytep));
+ 
+ 	for(int i = 0; i < dx; i++){
+                matrix[i] = malloc(pixelSize*dy*sizeof(png_byte));
+        }		
+	for(int y = 0; y < dy; y++){
+		png_bytep row = image->row_pointers[y0 + y];
+		for(int x = 0; x < dx; x++){
+			png_bytep ptr = &(row[x0*pixelSize + pixelSize*x]);
+	
+			png_bytep mrow = matrix[dx - 1 - x];
+			png_bytep mptr = &(mrow[pixelSize*y]);
+	
+			if(pixelSize == 3){
+				mptr[0] = ptr[0];
+				mptr[1] = ptr[1];
+				mptr[2] = ptr[2];
+			}else if(pixelSize == 4){
+				mptr[0] = ptr[0];
+				mptr[1] = ptr[1];
+				mptr[2] = ptr[2];
+				mptr[3] = ptr[3];
+			}
+		}
+	}
+	/*проверка выходов за границу*/
+	int xn0 = 0, xn1 = 0, yn0 = 0, yn1 = 0, deltaYU = 0, deltaXL = 0, deltaYD = 0, deltaXR = 0, del = 0;
+        del = dx - dy;
+	if(del%2 == 1){
+		del = del/2;
+		del = del - 1;
+	}else{
+		del = del/2;
+	}	
+	if(dx > dy){ 
+		xn0 = x0 + del;
+        	xn1 = x1 - del;
+       		yn0 = y0 - del;
+	        yn1 = y1 + del;
+	
+		deltaYU = 0 - yn0;
+		deltaYD = image->height - 1 - yn1;
+	}
+	del = dy - dx;
+	if(del%2 == 1){
+                del = del/2;
+                del = del - 1;
+        }else{
+                del = del/2;
+        }
+	if(dx < dy){
+		xn0 = x0 - del;
+		xn1 = x1 + del;
+		yn0 = y0 + del;
+		yn1 = y1 - del;
+
+		deltaXL = 0 - xn0;
+		deltaXR = image->width - 1 - xn1;
+	}
+	/*deltaYU*/
+	if(yn0 < 0){
+  	        yn0 = 0;
+	}
+	if(deltaYU < 0){
+		deltaYU = 0;
+	}
+	/*deltaYD*/
+	if(yn1 >= image->height){
+		yn1 = image->height - 1;
+	}
+	if(deltaYD > 0){
+		deltaYD = 0;
+	}
+	/*deltaXL*/
+	if(xn0 < 0){
+		xn0 = 0;
+	}
+	if(deltaXL < 0){
+		deltaXL = 0;
+	}
+	/*deltaXR*/
+	if(xn1 >= image->width){
+		xn1 = image->width - 1;
+	}
+	if(deltaXR > 0){
+		deltaXR = 0;
+	}
+	/*печатаем в картину*/
+	fprintf(stderr, "[deltaYU] = [%d]\n[deltaYD] = [%d]\n[deltaXL] = [%d]\n[deltaXR] = [%d]\n", deltaYU, deltaYD, deltaXL, deltaXR);
+	if(deltaYU > 0){
+		for(int y = 0; y < dx - deltaYU; y++){
+
+                        png_bytep row = image->row_pointers[yn0 + y];
+                        for(int x = 0; x < dy; x++){
+                                png_bytep ptr = &(row[xn0*pixelSize + pixelSize*x]);
+
+                                png_bytep mrow = matrix[y + deltaYU];
+                                png_bytep mptr = &(mrow[pixelSize*x]);
+
+                                if(pixelSize == 3){
+                                        ptr[0] = mptr[0];
+                                        ptr[1] = mptr[1];
+                                        ptr[2] = mptr[2];
+                                }else if(pixelSize == 4){
+                                        ptr[0] = mptr[0];
+                                        ptr[1] = mptr[1];
+                                        ptr[2] = mptr[2];
+                                        ptr[3] = mptr[3];
+                                }
+                        }
+                }
+	}
+	if(deltaYD < 0){
+		for(int y = 0; y < dx + deltaYD; y++){
+
+                        png_bytep row = image->row_pointers[yn0 + y];
+                        for(int x = 0; x < dy; x++){
+                                png_bytep ptr = &(row[xn0*pixelSize + pixelSize*x]);
+
+                                png_bytep mrow = matrix[y];
+                                png_bytep mptr = &(mrow[pixelSize*x]);
+
+                                if(pixelSize == 3){
+                                        ptr[0] = mptr[0];
+                                        ptr[1] = mptr[1];
+                                        ptr[2] = mptr[2];
+                                }else if(pixelSize == 4){
+                                        ptr[0] = mptr[0];
+                                        ptr[1] = mptr[1];
+                                        ptr[2] = mptr[2];
+                                        ptr[3] = mptr[3];
+                                }
+                        }
+                }
+	}
+	if(deltaXL > 0){
+		for(int y = 0; y < dx; y++){
+
+                        png_bytep row = image->row_pointers[yn0 + y];
+                        for(int x = 0; x < dy - deltaXL; x++){
+                                png_bytep ptr = &(row[xn0*pixelSize + pixelSize*x]);
+
+                                png_bytep mrow = matrix[y];
+                                png_bytep mptr = &(mrow[pixelSize*x + deltaXL*pixelSize]);
+
+                                if(pixelSize == 3){
+                                        ptr[0] = mptr[0];
+                                        ptr[1] = mptr[1];
+                                        ptr[2] = mptr[2];
+                                }else if(pixelSize == 4){
+                                        ptr[0] = mptr[0];
+                                        ptr[1] = mptr[1];
+                                        ptr[2] = mptr[2];
+                                        ptr[3] = mptr[3];
+                                }
+                        }
+                }
+	}
+	if(deltaXR < 0){
+		for(int y = 0; y < dx; y++){
+
+			png_bytep row = image->row_pointers[yn0 + y];
+                        for(int x = 0; x < dy + deltaXR; x++){
+                                png_bytep ptr = &(row[xn0*pixelSize + pixelSize*x]);
+
+				png_bytep mrow = matrix[y];
+                                png_bytep mptr = &(mrow[pixelSize*x]);
+                                if(pixelSize == 3){
+                                        ptr[0] = mptr[0];
+                                        ptr[1] = mptr[1];
+                                        ptr[2] = mptr[2];
+                                }else if(pixelSize == 4){
+                                        ptr[0] = mptr[0];
+                                        ptr[1] = mptr[1];
+                                        ptr[2] = mptr[2];
+                                        ptr[3] = mptr[3];
+                                }
+                        }
+                }	
+	}
+	if((deltaYU == 0) && (deltaYD == 0) && (deltaXL == 0) && (deltaXR == 0)){
+		for(int y = 0; y < dx; y++){
+			
+			png_bytep row = image->row_pointers[yn0 + y];
+			for(int x = 0; x < dy; x++){
+				png_bytep ptr = &(row[xn0*pixelSize + pixelSize*x]);
+	
+				png_bytep mrow = matrix[y];
+				png_bytep mptr = &(mrow[pixelSize*x]);
+	
+				if(pixelSize == 3){
+       	        	                ptr[0] = mptr[0];
+       		                        ptr[1] = mptr[1];
+                        	        ptr[2] = mptr[2];
+                        	}else if(pixelSize == 4){
+                                	ptr[0] = mptr[0];
+                                	ptr[1] = mptr[1];
+                                	ptr[2] = mptr[2];
+                                	ptr[3] = mptr[3];
+                        	}
+			}
+		}
+	}
+	/*корректировка обрезков*/	
+	if(dx > dy){
+		for(int y = 0; y < dy; y++){
+			png_bytep row = image->row_pointers[y0 + y];
+			for(int x = 0; x < (xn0 - x0); x++){
+				png_bytep ptr = &(row[x0*pixelSize + pixelSize*x]);
+				if(pixelSize == 3){
+	                                ptr[0] = 255;
+	                                ptr[1] = 255;
+	                                ptr[2] = 255;
+	                        }else if(pixelSize == 4){
+	                                ptr[3] = 0;
+	                        }
+	
+			}
+		}
+			
+		for(int y = 0; y < dy; y++){
+        	        png_bytep row = image->row_pointers[y0 + y];
+	                for(int x = 0; x < (x1 - xn1); x++){
+        	                png_bytep ptr = &(row[xn1*pixelSize + pixelSize*x]);
+	                        if(pixelSize == 3){
+                	                ptr[0] = 255;
+        	                        ptr[1] = 255;
+	                                ptr[2] = 255;
+                        	}else if(pixelSize == 4){
+                                	ptr[3] = 0;
+                        	}
+
+               		}
+        	}
+	}else{
+                for(int y = 0; y < (yn0-y0); y++){
+                        png_bytep row = image->row_pointers[y0 + y];
+                        for(int x = 0; x < dx; x++){
+                                png_bytep ptr = &(row[x0*pixelSize + pixelSize*x]);
+                                if(pixelSize == 3){
+                                        ptr[0] = 255;
+                                        ptr[1] = 255;
+                                        ptr[2] = 255;
+                                }else if(pixelSize == 4){
+                                        ptr[3] = 0;
+                                }
+
+                        }
+                }
+
+                for(int y = 0; y < (y1 - yn1); y++){
+                        png_bytep row = image->row_pointers[yn1 + y];
+                        for(int x = 0; x < dx; x++){
+                                png_bytep ptr = &(row[x0*pixelSize + pixelSize*x]);
+                                if(pixelSize == 3){
+                                        ptr[0] = 255;
+                                        ptr[1] = 255;
+                                        ptr[2] = 255;
+                                }else if(pixelSize == 4){
+                                        ptr[3] = 0;
+                                }
+
+                        }
+                }
+
+
+	}
+	
+	for(int i = 0; i < dx; i++){
+              free(matrix[i]);
+        }
+        free(matrix);
+}
