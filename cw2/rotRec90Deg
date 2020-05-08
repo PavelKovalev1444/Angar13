@@ -97,122 +97,30 @@ void rotRec90Deg(struct Png* image, int x0, int y0, int x1, int y1){
 	if(deltaXR > 0){
 		deltaXR = 0;
 	}
-	/*печатаем в картину*/
-	fprintf(stderr, "[deltaYU] = [%d]\n[deltaYD] = [%d]\n[deltaXL] = [%d]\n[deltaXR] = [%d]\n", deltaYU, deltaYD, deltaXL, deltaXR);
-	if(deltaYU > 0){
-		for(int y = 0; y < dx - deltaYU; y++){
+	/*печатаем в картину*/	
+//	fprintf(stderr, "[deltaYU] = [%d]\n[deltaYD] = [%d]\n[deltaXL] = [%d]\n[deltaXR] = [%d]\n", deltaYU, deltaYD, deltaXL, deltaXR);
 
-                        png_bytep row = image->row_pointers[yn0 + y];
-                        for(int x = 0; x < dy; x++){
-                                png_bytep ptr = &(row[xn0*pixelSize + pixelSize*x]);
+	for(int y = 0; y < dx - deltaYU + deltaYD; y++){
 
-                                png_bytep mrow = matrix[y + deltaYU];
-                                png_bytep mptr = &(mrow[pixelSize*x]);
+        	png_bytep row = image->row_pointers[yn0 + y];
+                for(int x = 0; x < dy - deltaXL + deltaXR; x++){
+        	        png_bytep ptr = &(row[xn0*pixelSize + pixelSize*x]);
 
-                                if(pixelSize == 3){
-                                        ptr[0] = mptr[0];
-                                        ptr[1] = mptr[1];
-                                        ptr[2] = mptr[2];
-                                }else if(pixelSize == 4){
-                                        ptr[0] = mptr[0];
-                                        ptr[1] = mptr[1];
-                                        ptr[2] = mptr[2];
-                                        ptr[3] = mptr[3];
-                                }
+                        png_bytep mrow = matrix[y + deltaYU];
+                        png_bytep mptr = &(mrow[pixelSize*x + deltaXL*pixelSize]);
+
+                        if(pixelSize == 3){
+                                ptr[0] = mptr[0];
+                                ptr[1] = mptr[1];
+                                ptr[2] = mptr[2];
+                        }else if(pixelSize == 4){
+                                ptr[0] = mptr[0];
+                                ptr[1] = mptr[1];
+                                ptr[2] = mptr[2];
+                                ptr[3] = mptr[3];
                         }
                 }
-	}
-	if(deltaYD < 0){
-		for(int y = 0; y < dx + deltaYD; y++){
-
-                        png_bytep row = image->row_pointers[yn0 + y];
-                        for(int x = 0; x < dy; x++){
-                                png_bytep ptr = &(row[xn0*pixelSize + pixelSize*x]);
-
-                                png_bytep mrow = matrix[y];
-                                png_bytep mptr = &(mrow[pixelSize*x]);
-
-                                if(pixelSize == 3){
-                                        ptr[0] = mptr[0];
-                                        ptr[1] = mptr[1];
-                                        ptr[2] = mptr[2];
-                                }else if(pixelSize == 4){
-                                        ptr[0] = mptr[0];
-                                        ptr[1] = mptr[1];
-                                        ptr[2] = mptr[2];
-                                        ptr[3] = mptr[3];
-                                }
-                        }
-                }
-	}
-	if(deltaXL > 0){
-		for(int y = 0; y < dx; y++){
-
-                        png_bytep row = image->row_pointers[yn0 + y];
-                        for(int x = 0; x < dy - deltaXL; x++){
-                                png_bytep ptr = &(row[xn0*pixelSize + pixelSize*x]);
-
-                                png_bytep mrow = matrix[y];
-                                png_bytep mptr = &(mrow[pixelSize*x + deltaXL*pixelSize]);
-
-                                if(pixelSize == 3){
-                                        ptr[0] = mptr[0];
-                                        ptr[1] = mptr[1];
-                                        ptr[2] = mptr[2];
-                                }else if(pixelSize == 4){
-                                        ptr[0] = mptr[0];
-                                        ptr[1] = mptr[1];
-                                        ptr[2] = mptr[2];
-                                        ptr[3] = mptr[3];
-                                }
-                        }
-                }
-	}
-	if(deltaXR < 0){
-		for(int y = 0; y < dx; y++){
-
-			png_bytep row = image->row_pointers[yn0 + y];
-                        for(int x = 0; x < dy + deltaXR; x++){
-                                png_bytep ptr = &(row[xn0*pixelSize + pixelSize*x]);
-
-				png_bytep mrow = matrix[y];
-                                png_bytep mptr = &(mrow[pixelSize*x]);
-                                if(pixelSize == 3){
-                                        ptr[0] = mptr[0];
-                                        ptr[1] = mptr[1];
-                                        ptr[2] = mptr[2];
-                                }else if(pixelSize == 4){
-                                        ptr[0] = mptr[0];
-                                        ptr[1] = mptr[1];
-                                        ptr[2] = mptr[2];
-                                        ptr[3] = mptr[3];
-                                }
-                        }
-                }	
-	}
-	if((deltaYU == 0) && (deltaYD == 0) && (deltaXL == 0) && (deltaXR == 0)){
-		for(int y = 0; y < dx; y++){
-			
-			png_bytep row = image->row_pointers[yn0 + y];
-			for(int x = 0; x < dy; x++){
-				png_bytep ptr = &(row[xn0*pixelSize + pixelSize*x]);
-	
-				png_bytep mrow = matrix[y];
-				png_bytep mptr = &(mrow[pixelSize*x]);
-	
-				if(pixelSize == 3){
-       	        	                ptr[0] = mptr[0];
-       		                        ptr[1] = mptr[1];
-                        	        ptr[2] = mptr[2];
-                        	}else if(pixelSize == 4){
-                                	ptr[0] = mptr[0];
-                                	ptr[1] = mptr[1];
-                                	ptr[2] = mptr[2];
-                                	ptr[3] = mptr[3];
-                        	}
-			}
-		}
-	}
+        }
 	/*корректировка обрезков*/	
 	if(dx > dy){
 		for(int y = 0; y < dy; y++){
