@@ -22,9 +22,6 @@ struct Png{
 
 
 struct argsFunc{
-	char* rectangle;
-	char* frame;
-	char* rotation;
 	int x0re; 			/*rectangle*/
 	int y0re;			/*rectangle*/
 	int x1re;			/*rectangle*/
@@ -45,10 +42,10 @@ struct argsFunc{
 };
 
 
-void read_png_file(char *file_name, struct Png *image);/*reading*/
+void readFile(char *file_name, struct Png *image);/*reading*/
 
 
-void write_png_file(char *file_name, struct Png *image);/*writing*/
+void writeFile(char *file_name, struct Png *image);/*writing*/
 
 
 void rectangle(struct Png* image, int x0, int y0, int x1, int y1, int width, char* col1, int bol, char* col2);/*draw rectangle*/
@@ -60,31 +57,48 @@ void frame(struct Png* image, int choice, int width, char* col);
 void rotation(struct Png* image, int x0, int y0, int x1, int y1, int angle);/*part rotation*/
 
 
-void rotationSquare90Deg(struct Png* image, int x0, int y0, int x1, int y1);/*square rotation*/
+void rotationSquare(struct Png* image, int x0, int y0, int x1, int y1);/*square rotation*/
 
 
-void rotRec180Deg(struct Png* image, int x0, int y0, int x1, int y1);/*rectangle rotation on 180 deg*/
+void rotationRectangle180(struct Png* image, int x0, int y0, int x1, int y1);/*rectangle rotation on 180 deg*/
 
 
-void rotRec90Deg(struct Png* image, int x0, int y0, int x1, int y1);/*rectangle rotation on 90 deg*/
+void rotationRectangle90(struct Png* image, int x0, int y0, int x1, int y1);/*rectangle rotation on 90 deg*/
 
 
-void printHelp(); /*написать эту функцию*/
+void printHelp();
 
 
 int main(int argc, char **argv) {
 	if(argc == 1){
 		printHelp();
 		return 0;
-	}    	
-	int opt;
-	char* opts = "r:f:t:o:h?";
+	}
+	struct Png image;	
 	
-	struct argsFunc arguments;
+	int idx = -1;
+	
+	for(int i = 0; i < argc; i++){
+		if(strstr(argv[i], ".png")){
+			idx = i;
+			break;
+		}
+	}
 
-	arguments.rectangle = NULL;
-       	arguments.frame = NULL;
-	arguments.rotation = NULL;	
+	if(idx == -1 && argc > 2){
+		printf("You didn't enter input file!\n");
+		return 0;
+	}else if(idx == -1 && argc == 2){
+		printHelp();
+		return 0;
+	}
+	int opt;
+	char* opts = "r:f:t:s:S:e:E:n:N:p:P:w:W:c:C:k:K:l:L:o:h?";
+		
+	readFile(argv[idx], &image);
+
+	struct argsFunc arguments;
+	
 	arguments.x0re = 0;                       
         arguments.y0re = 0;                       
         arguments.x1re = 0;                       
@@ -109,231 +123,308 @@ int main(int argc, char **argv) {
 		{"rotation", 0, NULL, 't'},
 		{"help", 0, NULL, 'h'},
 
-		{"start_x_rec", 1, NULL, 0},
-		{"start_y_rec", 1, NULL, 0},
-		{"end_x_rec", 1, NULL, 0},
-		{"end_y_rec", 1, NULL, 0},
+		{"start_x_rec", 1, NULL, 's'},
+		{"start_y_rec", 1, NULL, 'S'},
+		{"end_x_rec", 1, NULL, 'e'},
+		{"end_y_rec", 1, NULL, 'E'},
 		
-		{"start_x_rot", 1, NULL, 0},
-                {"start_y_rot", 1, NULL, 0},
-                {"end_x_rot", 1, NULL, 0},
-                {"end_y_rot", 1, NULL, 0},
+		{"start_x_rot", 1, NULL, 'n'},
+                {"start_y_rot", 1, NULL,'N'},
+                {"end_x_rot", 1, NULL, 'p'},
+                {"end_y_rot", 1, NULL, 'P'},
 
-		{"widthRe", 1, NULL, 0},
-		{"widthFr", 1, NULL, 0},
+		{"widthRe", 1, NULL, 'w'},
+		{"widthFr", 1, NULL, 'W'},
 
-		{"colorRe", 1, NULL, 0},
-		{"fillColor", 1, NULL, 0},
-		{"fill", 1, NULL, 0},	
-		{"colorFr", 1, NULL, 0},
+		{"colorRe", 1, NULL, 'c'},
+		{"fillColor", 1, NULL, 'C'},
+		{"fill", 1, NULL, 'k'},	
+		{"colorFr", 1, NULL, 'K'},
 
-		{"type", 1, NULL, 0},
-		{"angle", 1, NULL, 0},
+		{"type", 1, NULL, 'l'},
+		{"angle", 1, NULL, 'L'},
 
 		{"output", 1, NULL, 'o'},
 
 		{NULL, 0, NULL, 0},
 	};
+	
+	int flagsRec[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+
+	int flagsFra[3] = {0, 0, 0};
+
+	int flagsRot[5] = {0, 0, 0, 0, 0};
 
 	char* endptr;
-
 	int longIndex;
 	int iter = 0;
+	
+	int recFlag = 0, frameFlag = 0, rotFlag = 0;
+	int funcOnRect = 0, funcOnFram = 0, funcOnRot = 0;
 
 	opt = getopt_long(argc, argv, opts, longOpts, &longIndex); 
 
 	while(opt != -1){
 		switch(opt){
 			case 'r':
-				arguments.rectangle = argv[optind - 1];
+				recFlag = 1;
 				break;
 
 			case 'f':
-				arguments.frame = argv[optind - 1];
+				frameFlag = 1;
 				break;	
 
 			case 't':
-				arguments.rotation = argv[optind - 1];
+				rotFlag = 1; 
 				break;
 			
 			case 'o':
-				arguments.outFile = argv[optind - 1];
+				arguments.outFile = optarg;
 				break;
 
-			case 0:
-				if(strcmp(longOpts[longIndex].name, "start_x_rec") == 0){
-					strtol(optarg, &endptr, 10);
-					if(endptr == optarg + strlen(optarg)){
-						arguments.x0re = atoi(optarg);
-					}else{
-						printf("Incorrect start_x_rec value!\n");
-						return 0;
-					}	
-				}
-				
-				if(strcmp(longOpts[longIndex].name, "start_y_rec") == 0){
-					strtol(optarg, &endptr, 10);
-                                        if(endptr == optarg + strlen(optarg)){
-                                                arguments.y0re = atoi(optarg);
-                                        }else{
-                                                printf("Incorrect start_y_rec value!\n");
-                                                return 0;
-                                        }                               
-                                }
-				
-				if(strcmp(longOpts[longIndex].name, "end_x_rec") == 0){
-					strtol(optarg, &endptr, 10);
-                                        if(endptr == optarg + strlen(optarg)){
-                                                arguments.x1re = atoi(optarg);
-                                        }else{
-                                                printf("Incorrect end_x_rec value!\n");
-                                                return 0;
-                                        }                            
+			case 's':
+				strtol(optarg, &endptr, 10);
+				if(endptr == optarg + strlen(optarg)){
+					arguments.x0re = atoi(optarg);
+					flagsRec[0] = 1;
+					break;
+				}else{
+					printf("Incorrect start_x_rec value!\n\n");
+					printHelp();
+					return 0;
 				}
 
-				if(strcmp(longOpts[longIndex].name, "end_y_rec") == 0){
-					strtol(optarg, &endptr, 10);
-                                        if(endptr == optarg + strlen(optarg)){
-                                                arguments.y1re = atoi(optarg);
-                                        }else{
-                                                printf("Incorrect end_y_rec value!\n");
-                                                return 0;
-                                        }
-                                }
-
-				if(strcmp(longOpts[longIndex].name, "start_x_rot") == 0){
-					strtol(optarg, &endptr, 10);
-                                        if(endptr == optarg + strlen(optarg)){
-                                                arguments.x0ro = atoi(optarg);
-                                        }else{
-                                                printf("Incorrect start_x_rot value!\n");
-                                                return 0;
-                                        }
-                                }
-
-				if(strcmp(longOpts[longIndex].name, "start_y_rot") == 0){
-					strtol(optarg, &endptr, 10);
-                                        if(endptr == optarg + strlen(optarg)){
-                                                arguments.y0ro = atoi(optarg);
-                                        }else{
-                                                printf("Incorrect start_y_rot value!\n");
-                                                return 0;
-                                        }
-                                }
-
-				if(strcmp(longOpts[longIndex].name, "end_x_rot") == 0){                                       
-					strtol(optarg, &endptr, 10);
-                                        if(endptr == optarg + strlen(optarg)){
-                                                arguments.x1ro = atoi(optarg);
-                                        }else{
-                                                printf("Incorrect end_x_rot value!\n");
-                                                return 0;
-                                        }
-                                }
-
-				if(strcmp(longOpts[longIndex].name, "end_y_rot") == 0){                                        
-					strtol(optarg, &endptr, 10);
-                                        if(endptr == optarg + strlen(optarg)){
-                                                arguments.y1ro = atoi(optarg);
-                                        }else{
-                                                printf("Incorrect end_y_rot value!\n");
-                                                return 0;
-                                        }	                                
+			case 'S':
+				strtol(optarg, &endptr, 10);
+				if(endptr == optarg + strlen(optarg)){
+					arguments.y0re = atoi(optarg);
+					flagsRec[1] = 1;
+					break;
+				}else{
+					printf("Incorrect start_y_rec value!\n\n");
+					printHelp();
+					return 0;
 				}
 
-				if(strcmp(longOpts[longIndex].name, "widthRe") == 0){                                        
-					strtol(optarg, &endptr, 10);
-                                        if(endptr == optarg + strlen(optarg)){
-                                                arguments.widthRe = atoi(optarg);
-                                        }else{
-                                                printf("Incorrect widthRe value!\n");
-                                                return 0;
-                                        }
-                                }
-
-				if(strcmp(longOpts[longIndex].name, "widthFr") == 0){
-					strtol(optarg, &endptr, 10);                                        
-					if(endptr == optarg + strlen(optarg)){
-                                                arguments.widthFr = atoi(optarg);
-                                        }else{
-                                                printf("Incorrect widthFr value!\n");
-                                                return 0;
-                                        }
-                                }
-
-				if(strcmp(longOpts[longIndex].name, "colorRe") == 0){					
-                                                arguments.colorRe = optarg;                                        
-                                }
-
-				if(strcmp(longOpts[longIndex].name, "colorFr") == 0){					
-                                                arguments.colorFr = optarg;
-                                }
+			case 'e':
+				strtol(optarg, &endptr, 10);
+				if(endptr == optarg + strlen(optarg)){
+					arguments.x1re = atoi(optarg);
+					flagsRec[2] = 1;
+					break;
+				}else{
+					printf("Incorrect end_x_rec value!\n\n");
+					printHelp();
+					return 0;
+				}
 				
-				if(strcmp(longOpts[longIndex].name, "fill") == 0){
-					strtol(optarg, &endptr, 10);					
-					if(endptr == optarg + strlen(optarg)){
-                                                arguments.fill = atoi(optarg);
-                                        }else{
-                                                printf("Incorrect fill value! Can be 0 (fill off) or 1 (fill on)\n");
-                                                return 0;
-                                        }
+			case 'E':
+				strtol(optarg, &endptr, 10);
+				if(endptr == optarg + strlen(optarg)){
+					arguments.y1re = atoi(optarg);
+					flagsRec[3] = 1;
+					break;
+				}else{
+					printf("Incorrect end_y_rec value!\n\n");
+					printHelp();
+					return 0;
 				}
 
-				if(strcmp(longOpts[longIndex].name, "fillColor") == 0){
-                                                arguments.fillColor = optarg;                                        
-                                }
+			case 'n':
+				strtol(optarg, &endptr, 10);
+				if(endptr == optarg + strlen(optarg)){
+					arguments.x0ro = atoi(optarg);				
+					flagsRot[0] = 1;
+					break;
+				}else{
+					printf("Incorrect start_x_rot value!\n\n");
+					printHelp();
 				
-				if(strcmp(longOpts[longIndex].name, "type") == 0){
-					strtol(optarg, &endptr, 10);					
-					if(endptr == optarg + strlen(optarg)){
-                                                arguments.type = atoi(optarg);
-                                        }else{
-                                                printf("Incorrect type value!\n");
-                                                return 0;
-                                        }
-                                }
+				return 0;
+				}
 
-				if(strcmp(longOpts[longIndex].name, "angle") == 0){
-					strtol(optarg, &endptr, 10);                                        
-					if(endptr == optarg + strlen(optarg)){
-                                                arguments.angle = atoi(optarg);
-                                        }else{
-                                                printf("Incorrect angle value!\n");
-                                                return 0;
-                                        }
-                                }
-							
+			case 'N':
+				strtol(optarg, &endptr, 10);
+				if(endptr == optarg + strlen(optarg)){
+					arguments.y0ro = atoi(optarg);
+					flagsRot[1] = 1;
+					break;
+				}else{
+					printf("Incorrect start_y_rot value!\n\n");
+					printHelp();
+					return 0;
+				}
+
+			case 'p':
+				strtol(optarg, &endptr, 10);
+				if(endptr == optarg + strlen(optarg)){
+					arguments.x1ro = atoi(optarg);
+					flagsRot[2] = 1;
+					break;
+				}else{
+					printf("Incorrect end_x_rot value!\n\n");
+					printHelp();
+					return 0;
+				}
+			
+			case 'P':
+				strtol(optarg, &endptr, 10);
+				if(endptr == optarg + strlen(optarg)){
+					arguments.y1ro = atoi(optarg);
+					flagsRot[3] = 1;
+					break;
+				}else{
+					printf("Incorrect end_y_rot value!\n\n");
+					printHelp();
+					return 0;
+				}
+
+			case 'w':
+				strtol(optarg, &endptr, 10);
+				if(endptr == optarg + strlen(optarg)){
+					arguments.widthRe = atoi(optarg);
+					flagsRec[4] = 1;
+					break;
+				}else{
+					printf("Incorrect widthRe value!\n\n");
+					printHelp();
+					return 0;
+				}
+
+			case 'W':
+				strtol(optarg, &endptr, 10);
+				if(endptr == optarg + strlen(optarg)){
+					arguments.widthFr = atoi(optarg);
+					flagsFra[1] = 1;
+					break;
+				}else{
+					printf("Incorrect widthFr value!\n\n");
+					printHelp();
+					return 0;
+				}
+
+			case 'c':
+				arguments.colorRe = optarg;
+				flagsRec[5] = 1;
 				break;
+
+			case 'C':
+				arguments.fillColor = optarg;
+				flagsRec[7] = 1;
+				break;
+
+			case 'k':
+				strtol(optarg, &endptr, 10);
+				if(endptr == optarg + strlen(optarg)){
+					arguments.fill = atoi(optarg);
+					flagsRec[6] = 1;
+					break;
+				}else{
+					printf("Incorrect fill value!\n\n");
+					printHelp();
+					return 0;
+				}
+
+			case 'K':
+				arguments.colorFr = optarg;
+				flagsFra[2] = 1;
+				break;
+				
+			case 'l':
+				strtol(optarg, &endptr, 10);
+				if(endptr == optarg + strlen(optarg)){
+					arguments.type = atoi(optarg);
+					flagsFra[0] = 1;
+					break;
+				}else{
+					printf("Incorrect type value!\n\n");
+					printHelp();
+					return 0;
+				}
+
+			case 'L':
+				strtol(optarg, &endptr, 10);
+				if(endptr == optarg + strlen(optarg)){
+					arguments.angle = atoi(optarg);
+					flagsRot[4] = 1;
+					break;
+				}else{
+					printf("Incorrect angle value!\n\n");
+					printHelp();
+					return 0;
+				}
+
 			case 'h':
-			case '?':	
+			case '?':
 				printHelp();
 				return 0;
-				break;
 			default:
 				printHelp();
 				return 0;
-				break;	
 		}
+	
+		if(recFlag){
+			for(int i = 0; i < 8; i++){
+		                if(flagsRec[i] == 1){
+		                    funcOnRect += flagsRec[i];
+		                }
+		        }
+			if(funcOnRect == 8 || (funcOnRect == 7 && arguments.fill == 0)){
+				rectangle(&image, arguments.x0re, arguments.y0re, arguments.x1re, arguments.y1re, arguments.widthRe, arguments.colorRe, arguments.fill, arguments.fillColor);
+				for(int i = 0; i < 8; i++){
+			        	flagsRec[i] = 0;
+			        }
+			        funcOnRect = 0;
+				recFlag = 0;
+            		}else{
+			        funcOnRect = 0;
+			}
+		}
+		
+		if(frameFlag){
+			for(int i = 0; i < 3; i++){
+		                if(flagsFra[i] == 1){
+		                    funcOnFram += flagsFra[i];
+		                }
+		        }
+			if(funcOnFram == 3){
+				frame(&image, arguments.type, arguments.widthFr, arguments.colorFr);
+				for(int i = 0; i < 3; i++){
+			        	flagsRec[i] = 0;
+			        }
+			        funcOnFram = 0;
+				frameFlag = 0;
+            		}else{
+			        funcOnFram = 0;
+			}
+		}
+		
+		if(rotFlag){
+			for(int i = 0; i < 5; i++){
+		                if(flagsRot[i] == 1){
+		                    funcOnRot += flagsRot[i];
+		                }
+		        }
+			if(funcOnRot == 5){
+				rotation(&image, arguments.x0ro, arguments.y0ro, arguments.x1ro, arguments.y1ro, arguments.angle);
+				for(int i = 0; i < 5; i++){
+			        	flagsRec[i] = 0;
+			        }
+			        funcOnRot = 0;
+				rotFlag = 0;
+            		}else{
+			        funcOnRot = 0;
+			}
+		}
+	
 		opt = getopt_long(argc, argv, opts, longOpts, &longIndex);
 	}
-
-	struct Png image;	
-	read_png_file(argv[argc - 1], &image);
-
-	if(arguments.rectangle){
-		rectangle(&image, arguments.x0re, arguments.y0re, arguments.x1re, arguments.y1re, arguments.widthRe, arguments.colorRe, arguments.fill, arguments.fillColor);
-	}
-	if(arguments.frame){
-		frame(&image, arguments.type, arguments.widthFr, arguments.colorFr);
-	}
-	if(arguments.rotation){
-		rotation(&image, arguments.x0ro, arguments.y0ro, arguments.x1ro, arguments.y1ro, arguments.angle);
-	}
-	write_png_file(arguments.outFile, &image);
+ 
+	writeFile(arguments.outFile, &image);
 	return 0;
 }
 
-void read_png_file(char *file_name, struct Png *image){
+void readFile(char *file_name, struct Png *image){
 	int x,y;
     	char header[8];
 
@@ -363,7 +454,7 @@ void read_png_file(char *file_name, struct Png *image){
     	}
 
     	if(setjmp(png_jmpbuf(image->png_ptr))){
-        	printf("Sorry! There happened an error during tryint to initialize image structure.\n");
+        	printf("Sorry! There happened an error during trying to initialize image structure.\n");
 		exit(EXIT_SUCCESS);
     	}
 
@@ -381,7 +472,7 @@ void read_png_file(char *file_name, struct Png *image){
     	png_read_update_info(image->png_ptr, image->info_ptr);
 
     	if (setjmp(png_jmpbuf(image->png_ptr))){
-		printf("Sorry! There happened an error during reading image\n");
+		printf("Sorry! There happened an error during reading image.\n");
 		exit(EXIT_SUCCESS);
     	}
 
@@ -394,7 +485,7 @@ void read_png_file(char *file_name, struct Png *image){
     	fclose(fp);
 }
 
-void write_png_file(char *file_name, struct Png *image){
+void writeFile(char *file_name, struct Png *image){
     	int x,y;
     	FILE *fp = fopen(file_name, "wb");
     	if(!fp){
@@ -452,28 +543,28 @@ void write_png_file(char *file_name, struct Png *image){
     	fclose(fp);
 }
 
-void rectangle(struct Png* image, int x0, int y0, int x1, int y1, int width, char* col1, int bol, char* col2){
+void rectangle(struct Png* image, int x0, int y0, int x1, int y1, int width, char* col1, int bol, char* col2){	
 	int r1, g1, b1, r2, g2, b2;
 	if(col1){
 		if(strcmp(col1, "red") == 0){
 			r1 = 255;
-			b1 = 0;
 			g1 = 0;
+			b1 = 0;
 		}
 		if(strcmp(col1, "green") == 0){
                         r1 = 0;
-                        b1 = 255;
-                        g1 = 0;
+                        g1 = 255;
+			b1 = 0;
                 }
 		if(strcmp(col1, "blue") == 0){
                         r1 = 0;
-                        b1 = 0;
-                        g1 = 255;
+                        g1 = 0;
+                        b1 = 255;
                 }
 		if(strcmp(col1, "yellow") == 0){
                         r1 = 255;
-                        b1 = 255;
-                        g1 = 0;
+                        g1 = 255;
+                        b1 = 0;
                 }
 		if(strcmp(col1, "orange") == 0){
 			r1 = 255;
@@ -482,18 +573,18 @@ void rectangle(struct Png* image, int x0, int y0, int x1, int y1, int width, cha
 		}
 		if(strcmp(col1, "purple") == 0){
                         r1 = 128;
-                        b1 = 0;
                         g1 = 128;
+                        b1 = 0;
                 }
 		if(strcmp(col1, "white") == 0){
                         r1 = 255;
-                        b1 = 255;
                         g1 = 255;
+                        b1 = 255;
                 }
 		if(strcmp(col1, "black") == 0){
                         r1 = 0;
-                        b1 = 0;
                         g1 = 0;
+                        b1 = 0;
                 }
 	}else{
 		for (int y = 0; y < image->height; y++){
@@ -506,45 +597,45 @@ void rectangle(struct Png* image, int x0, int y0, int x1, int y1, int width, cha
 	if(bol == 1){
 		if(col2){
 	                if(strcmp(col2, "red") == 0){
-        	                r2 = 255;
-                	        b2 = 0;
-                        	g2 = 0;
-	                }
-	                if(strcmp(col2, "green") == 0){
-	                        r2 = 0;
-	                        b2 = 255;
-	                        g2 = 0;
-	                }
-	                if(strcmp(col2, "blue") == 0){
-	                        r2 = 0;
-	                        b2 = 0;
-	                        g2 = 255;
-	                }
-	                if(strcmp(col2, "yellow") == 0){
-	                        r2 = 255;
-	                        b2 = 255;
-	                        g2 = 0;
-	                }
-	                if(strcmp(col2, "orange") == 0){
-	                        r2 = 255;
-	                        g2 = 165;
-	                        b2 = 0;
-	                }
-	                if(strcmp(col2, "purple") == 0){
-	                        r2 = 128;
-        	                b2 = 0;
-		                g2 = 128;
-                	}
-	                if(strcmp(col2, "white") == 0){
-        	                r2 = 255;
-                	        b2 = 255;
-                        	g2 = 255;
-                	}
-	                if(strcmp(col2, "black") == 0){
-        	                r2 = 0;
-                	        b2 = 0;
-                        	g2 = 0;
-	                }
+				r1 = 255;
+				g1 = 0;
+				b1 = 0;
+			}
+			if(strcmp(col2, "green") == 0){
+	                        r1 = 0;
+                      		g1 = 255;
+				b1 = 0;
+        	        }
+			if(strcmp(col2, "blue") == 0){
+        	                r1 = 0;
+        	                g1 = 0;
+        	                b1 = 255;
+        	        }
+			if(strcmp(col2, "yellow") == 0){
+        	                r1 = 255;
+        	                g1 = 255;
+        	                b1 = 0;
+        	        }
+			if(strcmp(col2, "orange") == 0){
+				r1 = 255;
+				g1 = 165;
+				b1 = 0;
+			}
+			if(strcmp(col2, "purple") == 0){
+        	                r1 = 128;
+        	                g1 = 128;
+        	                b1 = 0;
+        	        }
+			if(strcmp(col2, "white") == 0){
+        	                r1 = 255;
+        	                g1 = 255;
+        	                b1 = 255;
+        	        }
+			if(strcmp(col2, "black") == 0){
+        	                r1 = 0;
+        	                g1 = 0;
+        	                b1 = 0;
+        	        }
 	        }else{
 	                for (int y = 0; y < image->height; y++){
 	                        free(image->row_pointers[y]);
@@ -560,6 +651,7 @@ void rectangle(struct Png* image, int x0, int y0, int x1, int y1, int width, cha
 	}
 	int size = width/2;
 	if(bol == 0){
+		/*рисование вертикальных сторон*/
 		for(int y = y0 - size; y < y1 + size; y++){
 			if(y < 0 || y > image->height - 1){
 				continue;
@@ -583,6 +675,7 @@ void rectangle(struct Png* image, int x0, int y0, int x1, int y1, int width, cha
         	        }
 
 		}
+		/*рисование горизонтальных сторон*/
 		for(int y = y0-size; y <= y0+size; y++){
                 	if(y < 0 || y > image->height-1){
                    		continue;
@@ -614,6 +707,7 @@ void rectangle(struct Png* image, int x0, int y0, int x1, int y1, int width, cha
 		return;
 	}
 	if(bol == 1){
+		/*заливка*/
 		for(int y = y0 - size; y <= y1 + size; y++){
                 	if(y < 0 || y > image->height-1){
 				continue;
@@ -628,6 +722,7 @@ void rectangle(struct Png* image, int x0, int y0, int x1, int y1, int width, cha
                     		}
                 	}
             	}
+		/*рисование вертикальных границ*/
             	for(int y = y0 - size; y <= y1 + size; y++){
                		if(y < 0 || y > image->height-1){
 			        continue;
@@ -636,20 +731,20 @@ void rectangle(struct Png* image, int x0, int y0, int x1, int y1, int width, cha
                 	for (int x = x0 - size; x <= x0 + size; x++){
                     		if(x >= 0 && x < image->width){
                        			png_bytep ptr = &(row[x*pixelSize]);
-					ptr[0] = r2;
-                                        ptr[1] = g2;
-                                        ptr[2] = b2;
+					ptr[0] = r1;
+                                        ptr[1] = g1;
+                                        ptr[2] = b1;
                     		}
                 	}
                 	for (int x = x1 - size; x <= x1 + size; x++){
                 		if(x >= 0 && x < image->width){
                         		png_bytep ptr = &(row[x*pixelSize]);
-					ptr[0] = r2;
-                                        ptr[1] = g2;
-                                        ptr[2] = b2;
+					ptr[0] = r1;
+                                        ptr[1] = g1;
+                                        ptr[2] = b1;
                     		}
                 	}
-            	}
+            	}/*рисование горизонтальных границ*/
             	for(int y = y0 - size; y <= y0 + size; y++){
 	                if(y < 0 || y > image->height-1){
 		                continue;
@@ -658,9 +753,9 @@ void rectangle(struct Png* image, int x0, int y0, int x1, int y1, int width, cha
                 	for(int x = x0; x <= x1; x++){
                     		if(x >= 0 && x < image->width){
                         		png_bytep ptr = &(row[x*pixelSize]);
-					ptr[0] = r2;
-                                        ptr[1] = g2;
-                                        ptr[2] = b2;
+					ptr[0] = r1;
+                                        ptr[1] = g1;
+                                        ptr[2] = b1;
                     		}
                 	}
             	}
@@ -672,9 +767,9 @@ void rectangle(struct Png* image, int x0, int y0, int x1, int y1, int width, cha
                 	for(int x = x0; x <= x1; x++){
                     		if(x >= 0 && x < image->width){
                         		png_bytep ptr = &(row[x*pixelSize]);
-					ptr[0] = r2;
-                                        ptr[1] = g2;
-                                        ptr[2] = b2;
+					ptr[0] = r1;
+                                        ptr[1] = g1;
+                                        ptr[2] = b1;
                     		}
                 	}
             	}
@@ -831,13 +926,13 @@ void frame(struct Png* image, int choice, int width, char* col){
 							}
 						}else{	
 							if(pixelSize ==3){
-								ptr[0] = 180;
+								ptr[0] = 120;
 								ptr[1] = 130;
 								ptr[2] = 150;
 							}else{
 								ptr[0] = 90;
 								ptr[1] = 110;
-								ptr[2] = 200;
+								ptr[2] = 135;
 								ptr[3]= 255;
 							}
 						}
@@ -864,20 +959,28 @@ void rotation(struct Png* image, int x0, int y0, int x1, int y1, int angle){
 		printf("Check your coordinates!\n");		
 		exit(EXIT_SUCCESS);
         }
-	if((angle != 90) && (angle != 180) && (angle != 270)){
+	if(angle == 0 || angle == 360){
+		for (int y = 0; y < image->height; y++){
+        		free(image->row_pointers[y]);
+		}
+    		free(image->row_pointers);		
+		printf("There is no need to rotate image's part for this angle.\n");		
+		exit(EXIT_SUCCESS);
+	}
+	if(angle%90 != 0){
 		for (int y = 0; y < image->height; y++){
         		free(image->row_pointers[y]);
 		}
  		free(image->row_pointers);
-		printf("Check your angle! It can be 90, 180 or 270 degres.\n");		
+		printf("Check your angle! It must be a multiple of 90 degrees.\n");		
 		exit(EXIT_SUCCESS);
 	}
-	if(x0 > x1 || y0 > y1){
+	if((x0 > x1) || (y0 > y1)){
 		for (int y = 0; y < image->height; y++){
         		free(image->row_pointers[y]);
 		}
  		free(image->row_pointers);	
-                printf("Check your coordinates! First you must enter left top coordinates, and then right bottom coordinates!\n");
+                printf("Check your coordinates!\n");
                 exit(EXIT_SUCCESS);
         }
         if(x0 < 0){
@@ -894,23 +997,26 @@ void rotation(struct Png* image, int x0, int y0, int x1, int y1, int angle){
         }
 	int dx = x1 - x0;
 	int dy = y1 - y0;
+	while(angle > 360){
+		angle = angle - 360;
+	}
 	if(dx == dy){
 		for(int i = 0; i < angle/90; i++){
-			rotationSquare90Deg(image, x0, y0, x1, y1);
+			rotationSquare(image, x0, y0, x1, y1);
 		}
 	}else{
 		if(angle == 90){
-			rotRec90Deg(image, x0, y0, x1, y1);
+			rotationRectangle90(image, x0, y0, x1, y1);
 		}else if(angle == 180){
-			rotRec180Deg(image, x0, y0, x1, y1);
+			rotationRectangle180(image, x0, y0, x1, y1);
 		}else if(angle == 270){
-			rotRec180Deg(image, x0, y0, x1, y1);
-			rotRec90Deg(image, x0, y0, x1, y1);
+			rotationRectangle180(image, x0, y0, x1, y1);
+			rotationRectangle90(image, x0, y0, x1, y1);
 		}
 	}
 }
 
-void rotationSquare90Deg(struct Png* image, int x0, int y0, int x1, int y1){
+void rotationSquare(struct Png* image, int x0, int y0, int x1, int y1){
 	int pixelSize = 3;
 	if (png_get_color_type(image->png_ptr, image->info_ptr) == PNG_COLOR_TYPE_RGB){
         	pixelSize = 3;
@@ -933,7 +1039,7 @@ void rotationSquare90Deg(struct Png* image, int x0, int y0, int x1, int y1){
 		png_bytep row = image->row_pointers[y0 + y];
 		for(int x = 0; x < cols; x++){
 	
-			png_bytep ptr = &(row[x0 + pixelSize*x]);
+			png_bytep ptr = &(row[pixelSize*x0 + pixelSize*x]);
 			
 			png_bytep mrow = matrix[rows - 1 - x];
 			png_bytep mptr = &(mrow[pixelSize*y]);
@@ -961,7 +1067,7 @@ void rotationSquare90Deg(struct Png* image, int x0, int y0, int x1, int y1){
 		
 		for(int x = 0; x < cols; x++){
 		
-			png_bytep ptr = &(row[x0 + pixelSize*x]);
+			png_bytep ptr = &(row[x0*pixelSize + pixelSize*x]);
 			png_bytep mptr = &(mrow[pixelSize*x]);
 			
 			if(pixelSize == 3){
@@ -987,16 +1093,9 @@ void rotationSquare90Deg(struct Png* image, int x0, int y0, int x1, int y1){
 	
 }	
 
-void rotRec180Deg(struct Png* image, int x0, int y0, int x1, int y1){
+void rotationRectangle180(struct Png* image, int x0, int y0, int x1, int y1){
 	int pixelSize = 3;
-	int epsilon = 0;
-        if (png_get_color_type(image->png_ptr, image->info_ptr) == PNG_COLOR_TYPE_RGB){
-                pixelSize = 3;
-		epsilon = x0%3;
-		x0 = x0 - epsilon;
-		epsilon = x1%3;
-                x1 = x1 - epsilon;
-        }
+
         if (png_get_color_type(image->png_ptr, image->info_ptr) == PNG_COLOR_TYPE_RGBA){
                 pixelSize = 4;
         }
@@ -1035,7 +1134,7 @@ void rotRec180Deg(struct Png* image, int x0, int y0, int x1, int y1){
                 png_bytep row = image->row_pointers[y0 + y];
                 png_bytep mrow = matrix[y];
                 for(int x = 0; x < cols; x++){
-                        png_bytep ptr = &(row[x0 + pixelSize*x]);
+                        png_bytep ptr = &(row[x0*pixelSize + pixelSize*x]);
                         png_bytep mptr = &(mrow[pixelSize*x]);
                         if(pixelSize == 3){
                                 ptr[0] = mptr[0];
@@ -1057,7 +1156,7 @@ void rotRec180Deg(struct Png* image, int x0, int y0, int x1, int y1){
         free(matrix);
 }
 
-void rotRec90Deg(struct Png* image, int x0, int y0, int x1, int y1){
+void rotationRectangle90(struct Png* image, int x0, int y0, int x1, int y1){
 	int xc = (x1 - x0)/2 + x0;
 	int yc = (y1 - y0)/2 + y0;
 	int dx = x1 - x0;
@@ -1095,15 +1194,15 @@ void rotRec90Deg(struct Png* image, int x0, int y0, int x1, int y1){
 		}
 	}
 	/*проверка выходов за границу*/
-	int xn0 = 0, xn1 = 0, yn0 = 0, yn1 = 0, deltaYU = 0, deltaXL = 0, deltaYD = 0, deltaXR = 0, del = 0;
-        del = dx - dy;
-	if(del%2 == 1){
-		del = del/2;
-		del = del - 1;
-	}else{
-		del = del/2;
-	}	
+	int xn0 = 0, xn1 = 0, yn0 = 0, yn1 = 0, deltaYU = 0, deltaXL = 0, deltaYD = 0, deltaXR = 0, del = 0;	
 	if(dx > dy){ 
+		del = dx - dy;
+		if(del%2 == 1){
+			del = del/2;
+			del = del - 1;
+		}else{
+			del = del/2;
+		}
 		xn0 = x0 + del;
         	xn1 = x1 - del;
        		yn0 = y0 - del;
@@ -1112,14 +1211,14 @@ void rotRec90Deg(struct Png* image, int x0, int y0, int x1, int y1){
 		deltaYU = 0 - yn0;
 		deltaYD = image->height - 1 - yn1;
 	}
-	del = dy - dx;
-	if(del%2 == 1){
-                del = del/2;
-                del = del - 1;
-        }else{
-                del = del/2;
-        }
 	if(dx < dy){
+		del = dy - dx;
+		if(del%2 == 1){
+           		del = del/2;
+        	        del = del - 1;
+       		}else{
+        	        del = del/2;
+        	}
 		xn0 = x0 - del;
 		xn1 = x1 + del;
 		yn0 = y0 + del;
@@ -1250,6 +1349,30 @@ void rotRec90Deg(struct Png* image, int x0, int y0, int x1, int y1){
 }
 
 void printHelp(){
-	printf("Usage:\n");
+	printf("Использование программы:\n");
+	printf("Есть 3 ключа для следующих операций: рисование прямоугольника, рисование рамки (есть 3 на выбор), поворот изображения на угол кратный 90 градусов:\n");
+	printf("\tКлюч для рисования прямогуольника: --rectangle\n");
+	printf("\tКлюч для рисования рамки: --frame\n");
+	printf("\tКлюч для поворота: --rotation\n\n");
+	printf("После того, как введен один из ключей выше - нужно ввести следующие ключи, соответствующие выбранной операции, которые принимают только один аргумент:\n");
+	printf("\tДля --rectangle:\n");
+	printf("\t\t--start_x_rec - абсцисса левого верхнего угла\n");
+	printf("\t\t--start_y_rec - ордината левого верхнего угла\n");
+	printf("\t\t--end_x_rec - абсцисса правого нижнего угла\n");
+	printf("\t\t--end_Y_rec - ордината правого нижнего угла\n");
+	printf("\t\t--widthRe - толщина сторон прямоугольника\n");
+	printf("\t\t--colorRe - цвет сторон прямоугольника(может принимать аргумент \"red\", \"green\", \"blue\", \"yellow\", \"orange\", \"purple\", \"white\", \"black\")\n");
+	printf("\t\t--fill - заливка (аргумент может быть 1 - заливка есть, может быть 0 - заливки нет)\n");
+	printf("\t\t--fillColor - цвет заливки (может принимать аргумент \"red\", \"green\", \"blue\", \"yellow\", \"orange\", \"purple\", \"white\", \"black\")\n");
+	printf("\tДля --frame:\n");
+	printf("\t\t--type - абсцисса левого верхнего угла.\n");
+	printf("\t\t--widthFr - ордината левого верхнего угла:\n");
+	printf("\t\t--colorFr - абсцисса правого нижнего угла\n");
+	printf("\tДля --rotation:\n");
+	printf("\t\t--start_x_rot - абсцисса левого верхнего угла\n");
+	printf("\t\t--start_y_rot - ордината левого верхнего угла\n");
+	printf("\t\t--end_x_rot - абсцисса правого нижнего угла\n");
+	printf("\t\t--end_Y_rot - ордината правого нижнего угла\n");
+	printf("\t\t--angle - угол поворота(должен быть кратным 90 градусов)\n\n");
 }
 
