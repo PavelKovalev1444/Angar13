@@ -1,0 +1,128 @@
+#include <iostream>
+#include <cstdlib>
+#include <string>
+using namespace std;
+
+bool Round(std::string & s, int& iter, int size, std::string & err);
+
+bool Square(std::string & s, int& iter, int size, std::string & err);
+
+bool isBracket(std::string & s);
+
+int main(){
+    std::string st;
+    cin >> st;
+    if(isBracket(st)){
+        cout << "It is bracket!" << '\n';
+    }
+    return 0;
+}
+
+bool isBracket(std::string & s){
+    std::string err = "";
+    int len = s.length();
+    int iter = 0;
+    err = err + s[iter];
+    if(s[0] == '[') {
+        iter = iter + 1;
+        err = err + s[iter];
+        return Square(s, iter, len, err);
+    }else if(s[0] == '('){
+        iter = iter + 1;
+        err = err + s[iter];
+        return Round(s, iter, len, err);
+    }else{
+        cout << err << '\n';
+        cout << "It is not bracket!" << '\n';
+        return false;
+    }
+}
+
+bool Square(std::string & s, int& iter, int size, std::string & err){
+    bool res;
+    if(iter != size){
+        if(s[iter] == '[') {
+            iter = iter + 1;
+            err = err + s[iter];
+            if (s[iter] == 'B') {
+                res = true;
+            } else if (s[iter] == '[') {
+                iter = iter + 1;
+                err = err + s[iter];
+                res = Square(s, iter, size, err);
+            } else {
+                cout << err << '\n';
+                cout << "It is not bracket!" << '\n';
+                return false;
+            }
+            iter = iter + 1;
+            err = err + s[iter];
+            if (s[iter] == ']') {
+                iter = iter + 1;
+                err = err + s[iter];
+                if(s[iter] == '(') {
+                    res = Round(s, iter, size, err);
+                }else if(s[iter] == ')'){
+                    return true;
+                }else{
+                    cout << err << '\n';
+                    cout << "It is not bracket!" << '\n';
+                    return false;
+                }
+            }else{
+                cout << err << '\n';
+                cout << "It is not bracket!" << '\n';
+                return false;
+            }
+        }else{
+            cout << err << '\n';
+            cout << "It is not bracket!" << '\n';
+            return false;
+        }
+    }
+    return res;
+}
+
+bool Round(std::string & s, int& iter, int size, std::string & err){
+    bool res;
+    if(iter != size){
+        if(s[iter] == '(') {
+            iter = iter + 1;
+            err = err + s[iter];
+            if (s[iter] == 'A') {
+                res = true;
+            } else if (s[iter] == '(') {
+                iter = iter + 1;
+                err = err + s[iter];
+                res = Square(s, iter, size, err);
+            } else {
+                cout << "It is not bracket!" << '\n';
+                return false;
+            }
+            iter = iter + 1;
+            err = err + s[iter];
+            if (s[iter] == ')') {
+                iter = iter + 1;
+                err = err + s[iter];
+                if(s[iter] == '[') {
+                    res = Square(s, iter, size, err);
+                }else if (s[iter] == ']'){
+                    return true;
+                }else{
+                    cout << err << '\n';
+                    cout << "It is not bracket!" << '\n';
+                    return false;
+                }
+            }else{
+                cout << err << '\n';
+                cout << "It is not bracket!" << '\n';
+                return false;
+            }
+        }else{
+            cout << err << '\n';
+            cout << "It is not bracket!" << '\n';
+            return false;
+        }
+    }
+    return res;
+}
