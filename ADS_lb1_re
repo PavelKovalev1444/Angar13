@@ -9,10 +9,10 @@ bool Square(std::string & s, int& iter, int size, std::string & err);
 
 bool isBracket(std::string & s);
 
-int main(){
-    std::string st;
-    getline(cin, st);
+int main(int argc, char** argv){
+    std::string st(argv[1]);
     if(isBracket(st)){
+	cout << st << '\n';
         cout << "It is bracket!" << '\n';
     }
     return 0;
