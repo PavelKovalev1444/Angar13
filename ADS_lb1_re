@@ -3,24 +3,23 @@
 #include <string>
 using namespace std;
 
-bool Round(string & s, int& iter, int size, string & err);
+bool Round(std::string & s, int& iter, int size, std::string & err);
 
-bool Square(string & s, int& iter, int size, string & err);
+bool Square(std::string & s, int& iter, int size, std::string & err);
 
-bool isBracket(string & s);
+bool isBracket(std::string & s);
 
 int main(){
-    string st;
+    std::string st;
     getline(cin, st);
     if(isBracket(st)){
-        cout << st << '\n';
         cout << "It is bracket!" << '\n';
     }
     return 0;
 }
 
-bool isBracket(string & s){
-    string err = "";
+bool isBracket(std::string & s){
+    std::string err = "";
     int len = s.length();
     int iter = 0;
     err = err + s[iter];
@@ -34,13 +33,13 @@ bool isBracket(string & s){
         return Round(s, iter, len, err);
     }else{
         cout << err << '\n';
-        cout << "Invalid symbol!" << '\n';
+        cout << "Invalid symbol" << '\n';
         cout << "It is not bracket!" << '\n';
         return false;
     }
 }
 
-bool Square(string & s, int& iter, int size, string & err){
+bool Square(std::string & s, int& iter, int size, std::string & err){
     bool res;
     if(iter != size) {
         if (s[iter] == ' ') {
@@ -60,7 +59,7 @@ bool Square(string & s, int& iter, int size, string & err){
                         res = Square(s, iter, size, err);
                     } else {
                         cout << err << '\n';
-                        cout << "Invalid symbol!" << '\n';
+                        cout << "Invalid symbol" << '\n';
                         cout << "It is not bracket!" << '\n';
                         return false;
                     }
@@ -72,23 +71,20 @@ bool Square(string & s, int& iter, int size, string & err){
                         if (s[iter] == ']') {
                             iter = iter + 1;
                             err = err + s[iter];
-                            if (s[iter] == ' ') {
+                            if(s[iter] == ' ') {
                                 iter = iter + 1;
                                 if (s[iter] == '(') {
                                     iter = iter - 1;
                                     res = Round(s, iter, size, err);
-                                } else if (s[iter] == ')') {
-                                    iter = iter + 1;
-                                    err = err + s[iter];
+                                } else if (s[iter] == ')') {/*add smth*/
                                     return true;
                                 } else {
                                     cout << err << '\n';
-                                    cout << "Invalid symbol!" << '\n';
+                                    cout << "Invalid symbol" << '\n';
                                     cout << "It is not bracket!" << '\n';
                                     return false;
                                 }
-                                
-                            } else {
+                            }else{
                                 cout << err << '\n';
                                 cout << "There must be a probel!" << '\n';
                                 cout << "It is not bracket!" << '\n';
@@ -96,7 +92,7 @@ bool Square(string & s, int& iter, int size, string & err){
                             }
                         } else {
                             cout << err << '\n';
-                            cout << "Invalid symbol!" << '\n';
+                            cout << "Invalid symbol" << '\n';
                             cout << "It is not bracket!" << '\n';
                             return false;
                         }
@@ -114,7 +110,7 @@ bool Square(string & s, int& iter, int size, string & err){
                 }
             }else{
                 cout << err << '\n';
-                cout << "Invalid symbol!" << '\n';
+                cout << "Invalid symbol" << '\n';
                 cout << "It is not bracket!" << '\n';
                 return false;
             }
@@ -128,13 +124,13 @@ bool Square(string & s, int& iter, int size, string & err){
     return res;
 }
 
-bool Round(string & s, int& iter, int size, string & err){
+bool Round(std::string & s, int& iter, int size, std::string & err){
     bool res;
-    if(iter != size){
-        if (s[iter] == ' '){
+    if(iter != size) {
+        if (s[iter] == ' ') {
             iter = iter + 1;
             err = err + s[iter];
-            if(s[iter] == '(') {
+            if (s[iter] == '(') {
                 iter = iter + 1;
                 err = err + s[iter];
                 if (s[iter] == ' ') {
@@ -148,7 +144,7 @@ bool Round(string & s, int& iter, int size, string & err){
                         res = Round(s, iter, size, err);
                     } else {
                         cout << err << '\n';
-                        cout << "Invalid symbol!" << '\n';
+                        cout << "Invalid symbol" << '\n';
                         cout << "It is not bracket!" << '\n';
                         return false;
                     }
@@ -160,30 +156,28 @@ bool Round(string & s, int& iter, int size, string & err){
                         if (s[iter] == ')') {
                             iter = iter + 1;
                             err = err + s[iter];
-                            if (s[iter] == ' ') {
+                            if(s[iter] == ' ') {
                                 iter = iter + 1;
                                 if (s[iter] == '[') {
                                     iter = iter - 1;
                                     res = Square(s, iter, size, err);
-                                } else if (s[iter] == ']') {
-                                    iter = iter + 1;
-                                    err = err + s[iter];
+                                } else if (s[iter] == ']') {/*add smth*/
                                     return true;
                                 } else {
                                     cout << err << '\n';
-                                    cout << "Invalid symbol!" << '\n';
+                                    cout << "Invalid symbol" << '\n';
                                     cout << "It is not bracket!" << '\n';
                                     return false;
                                 }
-                            } else {
+                            }else{
                                 cout << err << '\n';
                                 cout << "There must be a probel!" << '\n';
                                 cout << "It is not bracket!" << '\n';
                                 return false;
                             }
-                        }else{
+                        } else {
                             cout << err << '\n';
-                            cout << "Invalid symbol!" << '\n';
+                            cout << "Invalid symbol" << '\n';
                             cout << "It is not bracket!" << '\n';
                             return false;
                         }
@@ -201,7 +195,7 @@ bool Round(string & s, int& iter, int size, string & err){
                 }
             }else{
                 cout << err << '\n';
-                cout << "Invalid symbol!" << '\n';
+                cout << "Invalid symbol" << '\n';
                 cout << "It is not bracket!" << '\n';
                 return false;
             }
@@ -214,3 +208,5 @@ bool Round(string & s, int& iter, int size, string & err){
     }
     return res;
 }
+
+
