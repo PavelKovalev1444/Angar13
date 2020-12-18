@@ -1,0 +1,60 @@
+void rotation(struct Png* image, int x0, int y0, int x1, int y1, int angle){
+	int tmp = 0, flag = 0;
+	if( ( (x0 < 0) && (y0 < 0) && (x1 < 0) && (y1 < 0) ) || ( (x0 == x1) && (y0 == y1) ) ){
+		return;
+	}
+	if((angle != 90) && (angle != 180) && (angle != 270)){
+		return;
+	}
+	
+	if(x0 < 0){
+		x1 = 0;
+	}
+	if(x0 > image->height - 1){
+		x0 = image->height - 1;
+	}
+	if(x1 < 0){
+		x1 = 0;
+	}
+	if(x1 > image->height - 1){
+		x1 = image->height - 1;
+	}
+	if(y0 < 0 ){
+		y0 = 0;
+	}
+	if(y0 > image->height - 1){
+		y0 = image->height - 1;
+	}
+	if(y1 > image->height - 1){
+		y1 = image->height - 1;
+	}
+	if(y1 < 0){
+		y1 = 0;
+	}
+	if(x0 > x1){
+		tmp = x0;
+		x0 = x1;
+		x1 = tmp;
+	}
+	if(y0 > y1){
+		tmp = y0;
+		y0 = y1;
+		y1 = tmp;
+	}
+	int dx = x1 - x0;
+	int dy = y1 - y0;
+	if(dx == dy){
+		for(int i = 0; i < angle/90; i++){
+			rotationSquare90Deg(image, x0, y0, x1, y1);
+		}
+	}else{
+		if(angle == 90){
+			rotRec90Deg(image, x0, y0, x1, y1);
+		}else if(angle == 180){
+			rotRec180Deg(image, x0, y0, x1, y1);
+		}else if(angle == 270){
+			rotRec180Deg(image, x0, y0, x1, y1);
+			rotRec90Deg(image, x0, y0, x1, y1);
+		}
+	}
+}

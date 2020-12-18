@@ -1,0 +1,76 @@
+void rotationSquare90Deg(struct Png* image, int x0, int y0, int x1, int y1){
+	int pixelSize = 3;
+	if (png_get_color_type(image->png_ptr, image->info_ptr) == PNG_COLOR_TYPE_RGB){
+        	pixelSize = 3;
+	}
+        if (png_get_color_type(image->png_ptr, image->info_ptr) == PNG_COLOR_TYPE_RGBA){
+		pixelSize = 4;
+        }
+
+	int rows = y1 - y0;
+       	int cols = x1 - x0;
+	
+	png_bytep* matrix = malloc(rows*sizeof(png_bytep));
+
+	for(int i = 0; i < rows; i++){
+		matrix[i] = malloc(pixelSize*cols*sizeof(png_byte));
+	}
+
+	for(int y = 0; y < rows; y++){
+	
+		png_bytep row = image->row_pointers[y0 + y];
+		for(int x = 0; x < cols; x++){
+	
+			png_bytep ptr = &(row[x0 + pixelSize*x]);
+			
+			png_bytep mrow = matrix[rows - 1 - x];
+			png_bytep mptr = &(mrow[pixelSize*y]);
+	
+			if(pixelSize == 3){
+				mptr[0] = ptr[0];
+				mptr[1] = ptr[1];
+				mptr[2] = ptr[2];
+			}
+		
+			if(pixelSize == 4){
+				mptr[0] = ptr[0];
+                                mptr[1] = ptr[1];
+                                mptr[2] = ptr[2];
+                                mptr[3] = ptr[3];
+			}
+
+		}
+	}
+
+	for(int y = 0; y < rows; y++){
+		
+		png_bytep row = image->row_pointers[y0 + y];
+		png_bytep mrow = matrix[y];
+		
+		for(int x = 0; x < rows; x++){
+		
+			png_bytep ptr = &(row[x0 + pixelSize*x]);
+			png_bytep mptr = &(mrow[pixelSize*x]);
+			
+			if(pixelSize == 3){
+				ptr[0] = mptr[0];
+				ptr[1] = mptr[1];
+				ptr[2] = mptr[2];
+			}
+
+			if(pixelSize == 4){
+				ptr[0] = mptr[0];
+                                ptr[1] = mptr[1];
+                                ptr[2] = mptr[2];
+                                ptr[3] = mptr[3];
+			}
+
+		}
+	}
+	
+	for(int i = 0; i < rows; i++){
+		free(matrix[i]);	
+	}	
+	free(matrix);
+	
+}	
