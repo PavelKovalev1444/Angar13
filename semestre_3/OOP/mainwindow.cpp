@@ -3,7 +3,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    wdgt = new QWidget(this);//основной виджет
+    wdgt = new QWidget(this);
 
     btn1 = new QPushButton("New game", wdgt);
     btn2 = new QPushButton("Load game", wdgt);
@@ -87,7 +87,7 @@ void MainWindow::loadGame(){
                 area[i][j] = tmp;
             }
         }
-        //player p(plVec[0], plVec[1],plVec[2],plVec[3]);
+        
         field::getInstance()->restoreFromFile(h, w, area, *player::getInstance());
         field::getInstance()->getPointer()[player::getInstance()->getY()][player::getInstance()->getX()].setIsPlayer(true);
         field::getInstance()->enemyFill(*player::getInstance());
