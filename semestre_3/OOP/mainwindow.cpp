@@ -8,15 +8,15 @@ MainWindow::MainWindow(QWidget *parent)
     btn1 = new QPushButton("New game", wdgt);
     btn2 = new QPushButton("Load game", wdgt);
     btn3 = new QPushButton("Exit game", wdgt);
-    box = new QHBoxLayout(wdgt);//система распределения виджетов
-    area = new QScrollArea();//зона рисования
+    box = new QHBoxLayout(wdgt);
+    area = new QScrollArea();
     qDebug() << "line13";
     interface = new QVBoxLayout(wdgt);
     qDebug() << "line15";
     lbl = new QLabel(area);
 
 
-    lbl->setMouseTracking(true);//отслеживание мыши
+    lbl->setMouseTracking(true);
     lbl->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
     box->addItem(interface);
@@ -29,7 +29,6 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(wdgt);
 
     imageZone = new QImage(640, 640, QImage::Format_RGB888);
-    //отображаем на экране с этого момента
 
     int  i = 0, j = 0;
     while(i < 640){
@@ -40,7 +39,6 @@ MainWindow::MainWindow(QWidget *parent)
         j = 0;
         i++;
     }
-    //обновление картинки после значительных изменений
     restoreWindow();
     connect(btn1, SIGNAL(clicked()), this, SLOT(startGame()));
     connect(btn2, SIGNAL(clicked()), this, SLOT(loadGame()));
