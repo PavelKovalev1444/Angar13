@@ -10,9 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     btn3 = new QPushButton("Exit game", wdgt);
     box = new QHBoxLayout(wdgt);
     area = new QScrollArea();
-    qDebug() << "line13";
     interface = new QVBoxLayout(wdgt);
-    qDebug() << "line15";
     lbl = new QLabel(area);
 
 
