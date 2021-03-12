@@ -1,1 +1,1 @@
-# There is a folder with Design and Analysis of Algorithms
+# There are folders with labs of Design and Analysis of Algorithms subject
