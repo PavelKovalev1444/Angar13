@@ -1,0 +1,10 @@
+[
+  {
+    "share_id": 1,
+    "emitent_name": "Сбербанк",
+    "share_price": 1700,
+    "distribution": "Равномерный",
+    "max_change": 700,
+    "amount": 50
+  }
+]
