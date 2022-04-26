@@ -1,0 +1,58 @@
+.head_title {
+  margin-top: 15%;
+  text-align: center;
+}
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+#pictures {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+#participants {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+#settings {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+#pic_btn {
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+  padding: 0.8em 1em calc(0.8em + 3px);
+  border-radius: 3px;
+  background: #40c781;
+  box-shadow: 0 -3px #35a76e inset;
+  transition: 0.2s;
+}
+#partic_btn {
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+  padding: 0.8em 1em calc(0.8em + 3px);
+  border-radius: 3px;
+  background: #40c781;
+  box-shadow: 0 -3px #35a76e inset;
+  transition: 0.2s;
+}
+#settg_btn {
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+  padding: 0.8em 1em calc(0.8em + 3px);
+  border-radius: 3px;
+  background: #40c781;
+  box-shadow: 0 -3px #35a76e inset;
+  transition: 0.2s;
+}

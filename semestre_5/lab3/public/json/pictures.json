@@ -1,0 +1,35 @@
+[
+  {
+    "id": 0,
+    "name": "Птицы",
+    "author": "Дмитрий Попов",
+    "desc": "Птицы с орехами",
+    "start_price": 100000,
+    "min_step": 150,
+    "max_step": 1500,
+    "trade": "На торгах",
+    "path": "../public/pictures/pic1.jpg"
+  },
+  {
+    "id": 1,
+    "name": "Мона лиза",
+    "author": "Леонардо да Винчи",
+    "desc": "Портрет женщины",
+    "start_price": 150000,
+    "min_step": 100,
+    "max_step": 1000,
+    "trade": "На торгах",
+    "path": "../public/pictures/pic2.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Мона лиза",
+    "author": "Леонардо да Винчи",
+    "desc": "Портрет женщины",
+    "start_price": 150000,
+    "min_step": 100,
+    "max_step": 1000,
+    "trade": "На торгах",
+    "path": "https://losko.ru/wp-content/uploads/2019/11/7702b9faef4382f33090b0b87b2c0ad0-1.jpg"
+  }
+]

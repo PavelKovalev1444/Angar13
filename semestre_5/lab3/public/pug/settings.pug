@@ -1,0 +1,61 @@
+doctype html
+head
+    title Auction
+    link(rel="stylesheet" href="public/stylesheets/settings.css")
+    script(src="../jquery/jquery.js")
+    script(src="../public/js/settings.js")
+body
+    .exitButtonContainer
+        button(id="exitBtn" onclick="window.location.href = '/'") Назад
+    .head_title
+        h1 Настройки аукциона
+    .container
+        div#tables
+            table#settingTable(cellpadding = "15px")
+                tr
+                    th Параметр
+                    th Значение
+                tr
+                    td Дата и время начала аукциона
+                    .st_auc_dt
+                        td(id="st_auc_dt") #{settings.start_auc_date}
+                tr
+                    td Таймаут продажи
+                    .trd_tm
+                        td(id="trd_tm") #{settings.trade_timeout}
+                tr
+                    td Интервал до окончания торга
+                    .trd_int
+                        td(id="trd_int") #{settings.trade_interval}
+                tr
+                    td Пауза на изучение информации
+                    .ps_tm
+                        td(id="ps_tm") #{settings.pause_time}
+    .changeButtonContainer
+        button(id="changeBtn" onclick="edit_setting()") Редактировать информацию
+
+    #id01
+        .modal_content
+            .modal_container
+                h1 Редактирование настроек
+                    span(id="closeSpan")
+                        button(id="exit_bt" onclick="document.getElementById('id01').style.display='none'") X
+                div(id="form")
+                    .elem
+                        label() Дата и время начала аукциона:
+                        input(type="datetime-local" id="start_auc_date")
+                        br
+                    .elem
+                        label() Таймаут продажи:
+                        input(type="text" id="trade_timeout")
+                        br
+                    .elem
+                        label() Интервал до окончания торга:
+                        input(type="text" id="trade_interval")
+                        br
+                    .elem
+                        label() Пауза на изучение информации:
+                        input(type="text" id="pause_time")
+                        br
+                    .save_btn
+                        button(id="save_bt") Сохранить изменения

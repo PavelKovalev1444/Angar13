@@ -1,0 +1,117 @@
+doctype html
+head
+    title Auction
+    link(rel="stylesheet" href="../public/stylesheets/pictures.css")
+    script(src="../jquery/jquery.js")
+    script(src="../public/js/pictures.js")
+body
+    .head_title
+        h1 Список картин
+    .exitButtonContainer
+        button(id="exitBtn" onclick="window.location.href = '/'") Назад
+    .addButtonContainer
+        button(id="addPicBtn" onclick="add_pic()") Добавить картину
+    .container
+        div#tables
+            table#particTable(cellpadding = "10px")
+                tr
+                    th Картина
+                    th Название
+                    th Автор
+                    th Описание
+                    th Начальная цена
+                    th Минимальный шаг
+                    th Максимальный шаг
+                    th
+                    th
+                for item in pictures
+                    tr(id="tr"+item.id value=item.id)
+                        td(id="0td"+ item.id)
+                            img(src = item.path width=259 height=194)
+                        td(id="1td"+ item.id) #{item.name}
+                        td(id="2td"+ item.id) #{item.author}
+                        td(id="3td"+ item.id) #{item.desc}
+                        td(id="4td"+ item.id) #{item.start_price}
+                        td(id="5td"+ item.id) #{item.min_step}
+                        td(id="6td"+ item.id) #{item.max_step}
+                        td(id="7td"+ item.id)
+                            button(class="tradeButtonChanging" value=item.id onclick="edit_picture_trade(value)")
+                                span(id="tradeSpanChanging" + item.id) #{item.trade}
+                        td(id="8td"+ item.id)
+                            button(class="tableButtonChanging" value=item.id onclick="edit_picture_info(value)") Редактировать информацию
+
+    #id01
+        .modal_content
+            .modal_container
+                h1 Добавление картины
+                    span(id="closeSpan")
+                        button(id="exit_bt" onclick="document.getElementById('id01').style.display='none'") X
+                form(action="/addPicture" method="post")
+                    .elem
+                        label() Название картины:
+                        input(type="text" required name="name")
+                        br
+                    .elem
+                        label() Ссылка на изображение картины:
+                        input(type="text" required name="path")
+                        br
+                    .elem
+                        label() Автор картины:
+                        input(type="text" required name="author")
+                        br
+                    .elem
+                        label() Описание картины:
+                        input(type="text" required name="desc")
+                        br
+                    .elem
+                        label() Начальная цена картины:
+                        input(type="text" required name="money")
+                        br
+                    .elem
+                        label() Минимальный шаг:
+                        input(type="text" required name="min_step")
+                        br
+                    .elem
+                        label() Максимальный шаг:
+                        input(type="text" required name="max_step")
+                        br
+                    .save_btn
+                        button(id="save_bt" type="submit") Добавить картину
+
+    #id02
+        .modal_content
+            .modal_container
+                h1 Изменение информации о картине
+                    span(id="closeSpan2")
+                        button(id="exit_bt2" onclick="document.getElementById('id02').style.display='none'") X
+                div(id="form")
+                    .elem
+                        label() Название картины:
+                        input(id="editNameInput" type="text" required name="name")
+                        br
+                    .elem
+                        label() Ссылка на изображение картины:
+                        input(id="editPathInput" type="text" required name="path")
+                        br
+                    .elem
+                        label() Автор картины:
+                        input(id="editAuthorInput" type="text" required name="author")
+                        br
+                    .elem
+                        label() Описание картины:
+                        input(id="editDescInput" type="text" required name="desc")
+                        br
+                    .elem
+                        label() Начальная цена картины:
+                        input(id="editMoneyInput" type="text" required name="money")
+                        br
+                    .elem
+                        label() Минимальный шаг:
+                        input(id="editMinStepInput" type="text" required name="min_step")
+                        br
+                    .elem
+                        label() Максимальный шаг:
+                        input(type="editMaxStepInput" required name="max_step")
+                        br
+                    .save_btn
+                        button(id="save_bt2" onclick="ajax_edit_picture_info()") Изменить информацию

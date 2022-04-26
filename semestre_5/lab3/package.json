@@ -1,0 +1,28 @@
+{
+  "name": "lab3_web_ultimate_version_number_one",
+  "version": "1.0.0",
+  "description": "third web lab",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Kovalev Pavel",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "del": "^6.0.0",
+    "express": "^4.17.1",
+    "jquery": "^3.6.0",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-less": "^5.0.0",
+    "gulp-pug": "^5.0.0"
+  }
+}
