@@ -1,0 +1,62 @@
+[
+  {
+    "id": 0,
+    "name": "Первая научная история войны 1812",
+    "author": "Евгений Понасенков",
+    "date_of_writing": "2007-01-01",
+    "in_library": "Есть в наличии",
+    "person": "-",
+    "date_of_lending": "-",
+    "date_of_return": "-"
+  },
+  {
+    "id": 1,
+    "name": "Танго в одиночестве",
+    "author": "Евгений Понасенков",
+    "date_of_writing": "2007-01-01",
+    "in_library": "Есть в наличии",
+    "person": "-",
+    "date_of_lending": "-",
+    "date_of_return": "-"
+  },
+  {
+    "id": 2,
+    "name": "Звездные войны товарища Сталина",
+    "author": "Владимир Перемолотов",
+    "date_of_writing": "2012-04-04",
+    "in_library": "Есть в наличии",
+    "person": "-",
+    "date_of_lending": "-",
+    "date_of_return": "-"
+  },
+  {
+    "id": 3,
+    "name": "Ледокол",
+    "author": "Виктор Резун",
+    "date_of_writing": "1988-01-01",
+    "in_library": "Есть в наличии",
+    "person": "-",
+    "date_of_lending": "-",
+    "date_of_return": "-"
+  },
+  {
+    "id": 4,
+    "name": "Дюна",
+    "author": "Фрэнк Герберт",
+    "date_of_writing": "1963-01-01",
+    "in_library": "Есть в наличии",
+    "person": "-",
+    "date_of_lending": "-",
+    "date_of_return": "-"
+  },
+  {
+    "id": 5,
+    "name": "Котлован",
+    "author": "Андрей Платонов",
+    "date_of_writing": "1930-01-01",
+    "in_library": "Нет в наличии",
+    "person": "John Doe",
+    "date_of_lending": "2020-04-04",
+    "date_of_return": "2020-04-07"
+  }
+]

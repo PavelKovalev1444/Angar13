@@ -1,0 +1,42 @@
+html(lang="ru")
+    head
+        meta(charset="utf-8")
+        title= "Personal online library"
+        link(rel='stylesheet' href='/public/w3Css/w3.css')
+        link(href="/favicon.ico" type="image/x-icon" rel="icon")
+    body
+        .w3-container
+            div.w3-button.w3-display-topright(onclick="window.location.href = '/list'") X
+            h1(align='center') Change book information
+            form.w3-container(action='/changingInfo' method='POST')
+                w3-padding-16
+                    label() Название книги: #{book.name}
+                    br
+                    label() Новое название книги:
+                    input.w3-input(type="text" name="name")
+                    br
+                w3-padding-16
+                    label() Автор: #{book.author}
+                    br
+                    label() Новый автор:
+                    input.w3-input(type="text" name="author")
+                    br
+                w3-padding-16
+                    label() Дата написания: #{book.date_of_writing}
+                    br
+                    label() Новая дата написания:
+                    input.w3-input(type="date" name="date")
+                    br
+                w3-padding-16
+                    label() Наличие в библиотеке: #{book.in_library}
+                    br
+                w3-padding-16
+                    label() Кому выдано: #{book.person}
+                    br
+                w3-padding-16
+                    label() Дата выдачи: #{book.date_of_lending}
+                    br
+                w3-padding-16
+                    label() Дата возврата: #{book.date_of_return}
+                    br
+                button.w3-button.w3-black(type='submit') Подтвердить изменения

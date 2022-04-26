@@ -1,0 +1,19 @@
+html(lang="ru")
+    head
+        meta(charset="utf-8")
+        title= "Personal online library"
+        link(rel='stylesheet' href='/public/w3Css/w3.css')
+    body
+        .w3-container
+            span.w3-button.w3-display-topright(onclick="window.location.href = '/list';") X
+            h1(align='center') Book information
+            form.w3-container(action='/delBook' method='POST')
+                w3-padding-16
+                    label() Название книги
+                    input.w3-input(type="text" required name="name")
+                    br
+                w3-padding-16
+                    label() Автор
+                    input.w3-input(type="text" required name="author")
+                    br
+                button.w3-button.w3-black(type='submit') Удалить

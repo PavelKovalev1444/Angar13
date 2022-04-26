@@ -1,0 +1,90 @@
+html(lang="ru")
+    head
+        meta(charset="utf-8")
+        title= "Personal online library"
+        link(rel='stylesheet' href='/public/w3Css/w3.css')
+        script(rel='text/javascript' src = "/public/ajax/ajax.js")
+    body
+        .w3-green
+            h1(align='center') Online-library
+            .w3-bar.w3-center
+                button.w3-button.w3-black(onclick="document.getElementById('id01').style.display='block'") Добавить книгу
+                button.w3-button.w3-black(onclick="window.location.href = '/deleteBook';")  Удалить книгу
+                button.w3-button.w3-black(onclick="document.getElementById('id02').style.display='block'") Выдать книгу
+                button.w3-button.w3-black(onclick="window.location.href = '/';") Выйти
+            .w3-bar.w3-center
+                button.w3-button.w3-indigo(onclick='date_return(this)' id="date_return") Фильтр просроченных книг
+                button.w3-button.w3-indigo(onclick='in_library(this)' id="in_library") Фильтр по признаку "В наличии"
+                button.w3-button.w3-indigo(onclick='without_filter(this)' id="without_filter") Без фильтра
+
+    .w3-row.w3-yellow
+        for book in books
+            .w3-col.m3.l3.w3-center.w3-border.w3-border-black
+                div(id=book.id)
+                    p(hidden) id: #{book.id}
+                    //p(align='left') id: #{book.id}
+                    p(align='left') Название книги: #{book.name}
+                    p(align='left') Автор: #{book.author}
+                    p(align='left') Дата написания: #{book.date_of_writing}
+                    p(align='left') Наличие в библиотеке: #{book.in_library}
+                    p(align='left') Кому выдано: #{book.person}
+                    p(align='left') Дата выдачи: #{book.date_of_lending}
+                    p(align='left') Дата возврата: #{book.date_of_return}
+                    form.w3-container(action="chg/" + book.id method ="POST")
+                        button.w3-button.w3-black(type='submit') Изменить информацию о книге
+                    p
+                    form.w3-container(action="take/" + book.id method ="POST")
+                        button.w3-button.w3-black(type='submit') Вернуть книгу
+
+    #id01.w3-modal
+        .w3-modal-content
+            .w3-container
+                span.w3-button.w3-display-topright(onclick="document.getElementById('id01').style.display='none'") X
+                h1(align='center') Book information
+                form.w3-container(action='/addBook' method='POST')
+                    w3-padding-16
+                        label() Название книги:
+                        input.w3-input(type="text" required name="name")
+                        br
+                    w3-padding-16
+                        label() Автор:
+                        input.w3-input(type="text" required name="author")
+                        br
+                    w3-padding-16
+                        label() Дата написания:
+                        input.w3-input(type="date" required name="date")
+                        br
+                    form.w3-container(action='/subAdding' method='POST')
+                        button.w3-button.w3-black(type='submit') Добавить книгу
+
+    #id02.w3-modal
+        .w3-modal-content
+            .w3-container
+                span.w3-button.w3-display-topright(onclick="document.getElementById('id02').style.display='none'") X
+                h1(align='center') Reader information
+                form.w3-container(action="/lnd" method ="POST")
+                    w3-padding-16
+                        label() Название книги:
+                        input.w3-input(type="text" required name="name_of_book")
+                        br
+                    w3-padding-16
+                        label() Автор:
+                        input.w3-input(type="text" required name="name_of_author")
+                        br
+                    w3-padding-16
+                        label() Дата написания:
+                        input.w3-input(type="date" required name="date_of_writing")
+                        br
+                    w3-padding-16
+                        label() Кому выдано:
+                        input.w3-input(type="text" required name="name_of_reader")
+                        br
+                    w3-padding-16
+                        label() Дата выдачи:
+                        input.w3-input(type="date" required name="date_of_lending")
+                        br
+                    w3-padding-16
+                        label() Дата возврата:
+                        input.w3-input(type="date" required name="date_of_return")
+                        br
+                    button.w3-button.w3-black(type='submit' ) Выдать книгу
