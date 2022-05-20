@@ -12,7 +12,6 @@
 #include <QMouseEvent>
 #include <QtMath>
 #include <QDepthTest>
-#include "light.h"
 
 class Figure: public QOpenGLWidget
 {
@@ -29,6 +28,11 @@ public:
     void drawConeLines();
     void drawWall();
     void drawLight();
+    void drawScene();
+    void drawCone1(float, float, float, float, GLfloat, GLfloat, GLfloat);
+    void drawCone2(float, float, float, float, GLfloat, GLfloat, GLfloat);
+    void drawCone3(float, float, float, float, GLfloat, GLfloat, GLfloat);
+    void drawSurface(QVector<GLfloat>&, QVector<GLfloat>&, QVector<GLfloat>&, GLenum mode);
     QOpenGLShaderProgram* shaderProgram;
     QMatrix4x4 rotationMatrix;
     QMatrix4x4 scaleMatrix;

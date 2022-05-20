@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     QCheckBox* checkBox1 = new QCheckBox();
     checkBox1->setText(tr("Удалить невидимые грани/Прорисовать"));
-    checkBox1->setChecked(false);
+    checkBox1->setChecked(true);
     connect(checkBox1, &QCheckBox::stateChanged, figure, &Figure::setEnableDepth);
     vBox->addWidget(checkBox1);
 

@@ -64,7 +64,7 @@ void pointLight(){
 void projector(){
     vec3 lightDir = normalize(lightPosition - FragPos);
     float theta = dot(lightDir, normalize(-lightDirection));
-    if(theta < lightCutOff){
+    if(theta > lightCutOff){
 
         float distance = length(lightPosition - FragPos);
         float attenuation = 1.0 / (lightConstant + lightLinear * distance + lightQuadratic * (distance * distance));
@@ -104,8 +104,6 @@ void main(void)
             projector();
             break;
         case 4:
-            outColor = myColor;
-            break;
         case 0:
         default:
             outColor = myColor;

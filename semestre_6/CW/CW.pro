@@ -16,7 +16,6 @@ SOURCES += \
 
 HEADERS += \
     figure.h \
-    light.h \
     mainwindow.h
 
 # Default rules for deployment.
