@@ -6,6 +6,9 @@ let sortFirstNameType = 0
 let sortLastNameType = 0
 let sortAboutType = 0
 let sortEyeType = 0
+let indexOfChanging = -1
+
+let visibleEditor = false
 
 let firstNameSortImgTag = `<img src='No-sorting.png'>`
 let lastNameSortImgTag = `<img src='No-sorting.png'>`
@@ -211,7 +214,7 @@ function makeTableBody(){
     let data = getData()
 
     data.forEach(element => {
-        table += `<tr id='tr-${i}'>`
+        table += `<tr id='tr-${i}' onclick='showEditor(${i})'>`
         
         table += `<td id='td-fn-${i}'>`
         table += element.name.firstName
@@ -240,13 +243,105 @@ function makeTableBody(){
     return table
 }
 
+function makeButtons(){
+    if(page === 1){
+        return `<div id="page">
+                    ${page}
+                </div>
+                <button class="button" type="button" onclick="nextPage()">
+                    Вперед
+                </button>`
+    }else if(page === maxPages){
+        return `<button class="button" type="button" onclick="prevPage()">
+                    Назад
+                </button>
+                <div id="page">
+                    ${page}
+                </div>`
+    }else{
+        return `<button class="button" type="button" onclick="prevPage()">
+                    Назад
+                </button>
+                <div id="page">
+                    ${page}
+                </div>
+                <button class="button" type="button" onclick="nextPage()">
+                    Вперед
+                </button>`
+    }
+}
+
+function closeEditor(){
+    visibleEditor = false
+    document.getElementsByClassName('editor-wrapper')[0].style.display = 'none'
+}
+
+function showEditor(index){
+    visibleEditor = true
+    curRecord = data[(page-1)*limit + index]
+    indexOfChanging = index
+    document.getElementsByClassName('form-input')[0].value = curRecord.name.firstName
+    document.getElementsByClassName('form-input')[1].value = curRecord.name.lastName
+    document.getElementsByClassName('form-textarea')[0].value = curRecord.about
+    document.getElementsByClassName('form-input')[2].value = curRecord.eyeColor
+    document.getElementsByClassName('editor-wrapper')[0].style.display = 'block'
+}
+
+function changeTableRow(e){
+    e.preventDefault()
+    /*
+    let firstName = document.forms.rowEditForm.firstName.value
+    let lastName = document.forms.rowEditForm.lastName.value
+    let about = document.forms.rowEditForm.about.value
+    let eyeColor = document.forms.rowEditForm.eyeColor.value
+    */
+    let firstName = e.srcElement[0].value
+    let lastName = e.srcElement[1].value
+    let about = e.srcElement[2].value
+    let eyeColor = e.srcElement[3].value
+    closeEditor()
+    data[(page - 1)*limit + indexOfChanging].name.firstName = firstName
+    data[(page - 1)*limit + indexOfChanging].name.lastName = lastName
+    data[(page - 1)*limit + indexOfChanging].about = about
+    data[(page - 1)*limit + indexOfChanging].eyeColor = eyeColor
+    updateInitialData(data[(page - 1)*limit + indexOfChanging].id, { 
+        name: {
+            firstName: firstName,
+            lastName:lastName
+        },
+        about: about,
+        eyeColor: eyeColor
+    })
+    createTable(firstNameSortImgTag, lastNameSortImgTag, aboutSortImgTag, eyeColorSortImgTag)
+}
+
+function updateInitialData(oldRecordId, newRecord){
+    for(let i = 0; i < initialData.length; i++){
+        let curRecord = initialData[i]
+        if(curRecord.id === oldRecordId){
+            curRecord.name.firstName = newRecord.name.firstName
+            curRecord.name.lastName = newRecord.name.lastName
+            curRecord.about = newRecord.about
+            curRecord.eyeColor = newRecord.eyeColor
+            break;
+        }
+    }
+}
+
 function createTable(firstNameSortImgTag, lastNameSortImgTag, aboutSortImgTag, eyeColorSortImgTag){
     let table = '<table id="table">'
     table += createTableHeader(firstNameSortImgTag, lastNameSortImgTag, aboutSortImgTag, eyeColorSortImgTag)
     table += makeTableBody()
     table += '</table>'
     document.getElementById('table-wrapper').innerHTML = table
-    document.getElementById('page').innerHTML = '' + page
+    document.getElementById('buttons-wrapper').innerHTML = makeButtons()
+    if(visibleEditor){
+        document.getElementsByClassName('editor-wrapper')[0].style.display = 'block'
+    }else{
+        document.getElementsByClassName('editor-wrapper')[0].style.display = 'none'
+    }
 }
+
+document.getElementsByClassName('editor-form')[0].addEventListener('submit', changeTableRow)
 
 createTable(firstNameSortImgTag, lastNameSortImgTag, aboutSortImgTag, eyeColorSortImgTag)
