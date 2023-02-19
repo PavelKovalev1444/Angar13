@@ -29,7 +29,7 @@ function createAgent(coords, rotationSpeed, teamName, position){
 rl.question('Начальные координаты игрока: ', (coordsPlayer) => {
   rl.question('Скорость вращения игрока: ', (rotationSpeedPlayer) => {
     rl.question('Имя команды игрока: ', (teamNamePlayer) => {
-      //createAgent(coordsPlayer, rotationSpeedPlayer, teamNamePlayer, 'l')
+//      createAgent(coordsPlayer, rotationSpeedPlayer, teamNamePlayer, 'l')
       rl.question('Начальные координаты противника: ', (coordsEnemy) => {
         rl.question('Скорость вращения противника: ', (rotationSpeedEnemy) => {
           rl.question('Имя команды противника: ', (teamNameEnemy) => {

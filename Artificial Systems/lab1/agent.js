@@ -127,6 +127,9 @@ class Agent {
             }
           })
           console.log('===========')
+        }else{
+          console.log(`Не могу определить свою позицию: не вижу флагов (команда ${this.team}).`)
+          console.log('===========')
         }
       }
     }
@@ -228,129 +231,141 @@ class Agent {
       if(x1 === x2){
         //console.log('x1 === x2')
         let yAns = [(y2*y2 - y1*y1 + dist[0]*dist[0] - dist[1]*dist[1])/(2*(y2 - y1))]
-        let xAns = [
-          x1 + Math.sqrt(dist[0]*dist[0] - (yAns[0] - y1)*(yAns[0] - y1)),
-          x1 - Math.sqrt(dist[0]*dist[0] - (yAns[0] - y1)*(yAns[0] - y1))
-        ]
-        //console.log('xAns = ', xAns)
-        //console.log('yAns = ', yAns)
-        let err1 = Math.abs((xAns[0] - x3)*(xAns[0] - x3) + (yAns[0] - y3)*(yAns[0] - y3) - dist[2]*dist[2])
-        let err2 = Math.abs((xAns[1] - x3)*(xAns[1] - x3) + (yAns[0] - y3)*(yAns[0] - y3) - dist[2]*dist[2])
-        if(err1 - err2 >= 0){
-          res = {
-            x: xAns[1].toFixed(1),
-            y: -1*yAns[0].toFixed(1)
-          }
-        }else{
-          res = {
-            x: xAns[0].toFixed(1),
-            y: -1*yAns[0].toFixed(1)
+        if(dist[0]*dist[0] - (yAns[0] - y1)*(yAns[0] - y1) > 0){
+          let xAns = [
+            x1 + Math.sqrt(dist[0]*dist[0] - (yAns[0] - y1)*(yAns[0] - y1)),
+            x1 - Math.sqrt(dist[0]*dist[0] - (yAns[0] - y1)*(yAns[0] - y1))
+          ]
+          //console.log('xAns = ', xAns)
+          //console.log('yAns = ', yAns)
+          let err1 = Math.abs((xAns[0] - x3)*(xAns[0] - x3) + (yAns[0] - y3)*(yAns[0] - y3) - dist[2]*dist[2])
+          let err2 = Math.abs((xAns[1] - x3)*(xAns[1] - x3) + (yAns[0] - y3)*(yAns[0] - y3) - dist[2]*dist[2])
+          if(err1 - err2 >= 0){
+            res = {
+              x: xAns[1].toFixed(1),
+              y: -1*yAns[0].toFixed(1)
+            }
+          }else{
+            res = {
+              x: xAns[0].toFixed(1),
+              y: -1*yAns[0].toFixed(1)
+            }
           }
         }
       }else if(x1 === x3){
         //console.log('x1 === x3')
         let yAns = [(y3*y3 - y1*y1 + dist[0]*dist[0] - dist[2]*dist[2])/(2*(y3 - y1))]
-        let xAns = [
-          x1 + Math.sqrt(dist[0]*dist[0] - (yAns[0] - y1)*(yAns[0] - y1)),
-          x1 - Math.sqrt(dist[0]*dist[0] - (yAns[0] - y1)*(yAns[0] - y1))
-        ]
-        //console.log('xAns = ', xAns)
-        //console.log('yAns = ', yAns)
-        let err1 = Math.abs((xAns[0] - x2)*(xAns[0] - x2) + (yAns[0] - y2)*(yAns[0] - y2) - dist[1]*dist[1])
-        let err2 = Math.abs((xAns[1] - x2)*(xAns[1] - x2) + (yAns[0] - y2)*(yAns[0] - y2) - dist[1]*dist[1])
-        if(err1 - err2 >= 0){
-          res = {
-            x: xAns[1].toFixed(1),
-            y: -1*yAns[0].toFixed(1)
-          }
-        }else{
-          res = {
-            x: xAns[0].toFixed(1), 
-            y: -1*yAns[0].toFixed(1)
+        if(dist[0]*dist[0] - (yAns[0] - y1)*(yAns[0] - y1) > 0){
+          let xAns = [
+            x1 + Math.sqrt(dist[0]*dist[0] - (yAns[0] - y1)*(yAns[0] - y1)),
+            x1 - Math.sqrt(dist[0]*dist[0] - (yAns[0] - y1)*(yAns[0] - y1))
+          ]
+          //console.log('xAns = ', xAns)
+          //console.log('yAns = ', yAns)
+          let err1 = Math.abs((xAns[0] - x2)*(xAns[0] - x2) + (yAns[0] - y2)*(yAns[0] - y2) - dist[1]*dist[1])
+          let err2 = Math.abs((xAns[1] - x2)*(xAns[1] - x2) + (yAns[0] - y2)*(yAns[0] - y2) - dist[1]*dist[1])
+          if(err1 - err2 >= 0){
+            res = {
+              x: xAns[1].toFixed(1),
+              y: -1*yAns[0].toFixed(1)
+            }
+          }else{
+            res = {
+              x: xAns[0].toFixed(1), 
+              y: -1*yAns[0].toFixed(1)
+            }
           }
         }
       }else if(x2 === x3){
         //console.log('x2 === x3')
         let yAns = [(y3*y3 - y2*y2 + dist[1]*dist[1] - dist[2]*dist[2])/(2*(y3 - y2))]
-        let xAns = [
-          x2 + Math.sqrt(dist[1]*dist[1] - (yAns[0] - y2)*(yAns[0] - y2)),
-          x2 - Math.sqrt(dist[1]*dist[1] - (yAns[0] - y2)*(yAns[0] - y2))
-        ]
-        //console.log('xAns = ', xAns)
-        //console.log('yAns = ', yAns)
-        if(xAns[0] >= -54 && xAns[0] <= 54){
-          res = {
-            x: xAns[0].toFixed(1), 
-            y: -1*yAns[0].toFixed(1)
-          }
-        }else{
-          res = {
-            x: xAns[1].toFixed(1),
-            y: -1*yAns[0].toFixed(1)
+        if(dist[1]*dist[1] - (yAns[0] - y2)*(yAns[0] - y2) > 0){
+          let xAns = [
+            x2 + Math.sqrt(dist[1]*dist[1] - (yAns[0] - y2)*(yAns[0] - y2)),
+            x2 - Math.sqrt(dist[1]*dist[1] - (yAns[0] - y2)*(yAns[0] - y2))
+          ]
+          //console.log('xAns = ', xAns)
+          //console.log('yAns = ', yAns)
+          if(xAns[0] >= -54 && xAns[0] <= 54){
+            res = {
+              x: xAns[0].toFixed(1), 
+              y: -1*yAns[0].toFixed(1)
+            }
+          }else{
+            res = {
+              x: xAns[1].toFixed(1),
+              y: -1*yAns[0].toFixed(1)
+            }
           }
         }
       }else if(y1 === y2){
         //console.log('y1 === y2')
         let xAns = [(x2*x2 - x1*x1 + dist[0]*dist[0] - dist[1]*dist[1])/(2*(x2 - x1))]
-        let yAns = [
-          y1 + Math.sqrt(dist[0]*dist[0] - (xAns[0] - x1)*(xAns[0] - x1)),
-          y1 - Math.sqrt(dist[0]*dist[0] - (xAns[0] - x1)*(xAns[0] - x1)),
-        ]
-        //console.log('xAns = ', xAns)
-        //console.log('yAns = ', yAns)
-        let err1 = Math.abs((xAns[0] - x3)*(xAns[0] - x3) + (yAns[0] - y3)*(yAns[0] - y3) - dist[2]*dist[2])
-        let err2 = Math.abs((xAns[0] - x3)*(xAns[0] - x3) + (yAns[1] - y3)*(yAns[1] - y3) - dist[2]*dist[2])
-        if(err1 - err2 >= 0){
-          res = {
-            x: xAns[0].toFixed(1), 
-            y: -1*yAns[1].toFixed(1)
-          }
-        }else{
-          res = {
-            x: xAns[0].toFixed(1), 
-            y: -1*yAns[0].toFixed(1)
+        if(dist[0]*dist[0] - (xAns[0] - x1)*(xAns[0] - x1) > 0){
+          let yAns = [
+            y1 + Math.sqrt(dist[0]*dist[0] - (xAns[0] - x1)*(xAns[0] - x1)),
+            y1 - Math.sqrt(dist[0]*dist[0] - (xAns[0] - x1)*(xAns[0] - x1))
+          ]
+          //console.log('xAns = ', xAns)
+          //console.log('yAns = ', yAns)
+          let err1 = Math.abs((xAns[0] - x3)*(xAns[0] - x3) + (yAns[0] - y3)*(yAns[0] - y3) - dist[2]*dist[2])
+          let err2 = Math.abs((xAns[0] - x3)*(xAns[0] - x3) + (yAns[1] - y3)*(yAns[1] - y3) - dist[2]*dist[2])
+          if(err1 - err2 >= 0){
+            res = {
+              x: xAns[0].toFixed(1), 
+              y: -1*yAns[1].toFixed(1)
+            }
+          }else{
+            res = {
+              x: xAns[0].toFixed(1), 
+              y: -1*yAns[0].toFixed(1)
+            }
           }
         }
       }else if(y1 === y3){
         //console.log('y1 === y3')
         let xAns = [(x3*x3 - x1*x1 + dist[0]*dist[0] - dist[2]*dist[2])/(2*(x3 - x1))]
-        let yAns = [
-          y1 + Math.sqrt(dist[0]*dist[0] - (xAns[0] - x1)*(xAns[0] - x1)),
-          y1 - Math.sqrt(dist[0]*dist[0] - (xAns[0] - x1)*(xAns[0] - x1)),
-        ]
-        //console.log('xAns = ', xAns)
-        //console.log('yAns = ', yAns)
-        let err1 = Math.abs((xAns[0] - x2)*(xAns[0] - x2) + (yAns[0] - y2)*(yAns[0] - y2) - dist[1]*dist[1])
-        let err2 = Math.abs((xAns[0] - x2)*(xAns[0] - x2) + (yAns[1] - y2)*(yAns[1] - y2) - dist[1]*dist[1])
-        if(err1 - err2 > 0){
-          res = {
-            x: xAns[0].toFixed(1), 
-            y: -1*yAns[1].toFixed(1)
-          }
-        }else{
-          res = {
-            x: xAns[0].toFixed(1), 
-            y: -1*yAns[0].toFixed(1)
+        if(dist[0]*dist[0] - (xAns[0] - x1)*(xAns[0] - x1) > 0){
+          let yAns = [
+            y1 + Math.sqrt(dist[0]*dist[0] - (xAns[0] - x1)*(xAns[0] - x1)),
+            y1 - Math.sqrt(dist[0]*dist[0] - (xAns[0] - x1)*(xAns[0] - x1))
+          ]
+          //console.log('xAns = ', xAns)
+          //console.log('yAns = ', yAns)
+          let err1 = Math.abs((xAns[0] - x2)*(xAns[0] - x2) + (yAns[0] - y2)*(yAns[0] - y2) - dist[1]*dist[1])
+          let err2 = Math.abs((xAns[0] - x2)*(xAns[0] - x2) + (yAns[1] - y2)*(yAns[1] - y2) - dist[1]*dist[1])
+          if(err1 - err2 > 0){
+            res = {
+              x: xAns[0].toFixed(1), 
+              y: -1*yAns[1].toFixed(1)
+            }
+          }else{
+            res = {
+              x: xAns[0].toFixed(1), 
+              y: -1*yAns[0].toFixed(1)
+            }
           }
         }
       }else if(y2 === y3){
         //console.log('y2 === y3')
         let xAns = [(x3*x3 - x2*x2 + dist[1]*dist[1] - dist[2]*dist[2])/(2*(x3 - x2))]
-        let yAns = [
-          y1 + Math.sqrt(dist[1]*dist[1] - (xAns[0] - x2)*(xAns[0] - x2)),
-          y1 - Math.sqrt(dist[1]*dist[1] - (xAns[0] - x2)*(xAns[0] - x2)),
-        ]
-        //console.log('xAns = ', xAns)
-        //console.log('yAns = ', yAns)
-        if(yAns[0] >= -32 && yAns[0] >= 32){
-          res = {
-            x: xAns[0].toFixed(1),
-            y: -1*yAns[0].toFixed(1)
-          }
-        }else{
-          res = {
-            x: xAns[0].toFixed(1),
-            y: -1*yAns[1].toFixed(1)
+        if(dist[1]*dist[1] - (xAns[0] - x2)*(xAns[0] - x2) > 0){
+          let yAns = [
+            y1 + Math.sqrt(dist[1]*dist[1] - (xAns[0] - x2)*(xAns[0] - x2)),
+            y1 - Math.sqrt(dist[1]*dist[1] - (xAns[0] - x2)*(xAns[0] - x2))
+          ]
+          //console.log('xAns = ', xAns)
+          //console.log('yAns = ', yAns)
+          if(yAns[0] >= -32 && yAns[0] >= 32){
+            res = {
+              x: xAns[0].toFixed(1),
+              y: -1*yAns[0].toFixed(1)
+            }
+          }else{
+            res = {
+              x: xAns[0].toFixed(1),
+              y: -1*yAns[1].toFixed(1)
+            }
           }
         }
       }else{
