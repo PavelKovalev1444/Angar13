@@ -1,0 +1,80 @@
+.editor-wrapper{
+    width: 30vw;
+    margin-top: 55px;
+    display: none;
+}
+
+.editor-header{
+    text-align: center;
+    background-color: #BCEBDD;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.header-text{
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 18pt;
+    font-weight: 400;
+    color: rgb(15, 15, 15);
+}
+
+.content-text{
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 14pt;
+    font-weight: 300;
+    color: rgb(15, 15, 15);
+    margin-top: 0;
+}
+
+.editor-form{
+    padding: 5%;
+}
+
+.form-item{
+    margin-bottom: 5%;
+}
+
+.editor-content{
+    background-color: #F8E391;
+    width: 100%;
+    border-radius: 0px 0px 10px 10px;
+    display: block;
+}
+
+.form-input{
+    width: 90%;
+}
+
+.form-textarea{
+    width: 90%;
+    display: block;
+}
+
+.form-footer{
+    display: -webkit-flex; 
+    justify-content: center;
+}
+
+.form-button {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 15px 25px;
+    width: 50%;
+    font-size: 14px;
+}
+
+.form-button:active {
+    transform: scale(0.97);
+}
+
+.form-button:focus {
+    outline: 0;
+}
+
+.form-button:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
