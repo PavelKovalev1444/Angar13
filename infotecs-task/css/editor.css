@@ -5,6 +5,7 @@
 }
 
 .editor-header{
+    padding: 5px 10px;
     text-align: center;
     background-color: #BCEBDD;
     border-radius: 10px 10px 0px 0px;
@@ -15,6 +16,11 @@
     font-size: 18pt;
     font-weight: 400;
     color: rgb(15, 15, 15);
+}
+
+.editor-button-close{
+    cursor: pointer; 
+    float: right;
 }
 
 .content-text{
@@ -50,7 +56,7 @@
 }
 
 .form-footer{
-    display: -webkit-flex; 
+    display: flex;
     justify-content: center;
 }
 
@@ -61,9 +67,10 @@
     border: 0;
     border-radius: 6px;
     cursor: pointer;
-    padding: 15px 25px;
-    width: 50%;
+    width: 80px;
+    height: 45px;
     font-size: 14px;
+    text-align: center;
 }
 
 .form-button:active {

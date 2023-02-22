@@ -17,6 +17,10 @@ table{
     margin: 0;
 }
 
+tr{
+    cursor: pointer;
+}
+
 th {
     background: #BCEBDD;
     color: rgb(15, 15, 15);
