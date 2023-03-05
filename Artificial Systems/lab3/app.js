@@ -27,5 +27,5 @@ function createAgent(coords, rotationSpeed, teamName, position){
 }
 
 createAgent('-15 0', 30, 'A', 'l')
-//createAgent('-20 10', 30, 'A', 'l')
-createAgent('-40 0', 30, 'B', 'r')
+createAgent('-20 10', 30, 'A', 'l')
+createAgent('-30 30', 30, 'B', 'r')

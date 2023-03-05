@@ -3,6 +3,7 @@ const Msg = require('./msg')
 const singleDTree = require('./singleDTree')
 const DTreeManager = require('./DTreeManager')
 const goalManTree = require('./goalManTree')
+const swarmTree = require('./swarmTree')
 
 class Agent {
   constructor(rotationSpeed, position, team) {
@@ -64,6 +65,8 @@ class Agent {
           this.act = DTreeManager.getAction(singleDTree, p)
         }else if(this.position === 'r' && this.id === 1){
           this.act = DTreeManager.getAction(goalManTree, p)
+        }else if(this.position === 'l' && this.id === 2){
+          this.act = DTreeManager.getAction(swarmTree, p)
         }
       }
     }

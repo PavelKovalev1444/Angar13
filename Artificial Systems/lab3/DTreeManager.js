@@ -4,6 +4,7 @@ module.exports = {
   getAction(dt, p) {
     this.p = p
     function execute(dt, title, Manager) {
+      //console.log('title = ', title)
       const action = dt[title]
       if(typeof action.exec == "function"){
         action.exec(Manager, dt.state)
@@ -25,7 +26,7 @@ module.exports = {
   },
   getVisible(obj){
     //console.log('getVisible')
-    //console.log('obj = ', obj)  
+    //console.log('obj = ', obj)
     let objects = null
     if(obj === 'p'){
       objects = this.p.find(el => el.cmd && el.cmd.p[0] === obj)
@@ -34,7 +35,6 @@ module.exports = {
       return Boolean(objects)
     }else{
       objects = this.p.find(el => el.cmd && el.cmd.p.join('') === obj)
-      //console.log('objects = ', objects)
       //console.log('================')
       return Boolean(objects)
     }
@@ -86,11 +86,15 @@ module.exports = {
       return null
     }
   },
-  getMyPos() {
+  getPos() {
     const visibleFlags = this.p.filter((obj) => obj.cmd && (obj.cmd.p[0] === 'f'))
     let curPos = null
     if(visibleFlags.length > 1){
       curPos = positionLocator.threeFlags(visibleFlags)
+      if(curPos){
+        curPos.x = curPos.x - 0
+        curPos.y = curPos.y - 0
+      }
     }
     //console.log(curPos)
     //console.log('=================')

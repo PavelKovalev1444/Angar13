@@ -22,7 +22,7 @@ function twoFlags(pArray, flags) {
     ]
     for(let i = 0; i < 2; i++){
       if(xAns[i] <= 54 && xAns[i] >= -54){
-        res = {x: xAns[i].toFixed(1), y: -1*yAns[0].toFixed(1)}
+        res = {x: xAns[i].toFixed(1), y: (-1*yAns[0]).toFixed(1)}
       }
     }
   }else if(y1 === y2){
@@ -33,7 +33,7 @@ function twoFlags(pArray, flags) {
     ]
     for(let i = 0; i < 2; i++){
       if(yAns[i] <= 32 && yAns[i] >= -32){
-        res = {x: xAns[0].toFixed(1), y: -1*yAns[i].toFixed(1)}
+        res = {x: xAns[0].toFixed(1), y: (-1*yAns[i]).toFixed(1)}
       }
     }
   }else{
@@ -57,12 +57,12 @@ function twoFlags(pArray, flags) {
     ]
     for(let i = 0; i < 2; i++){
       if(xAns[i] <= 54 && xAns[i] >= -54 && yAns[0] <= 32 && yAns[0] >= -32){
-        res = {x: xAns[i].toFixed(1), y: -1*yAns[0].toFixed(1)}
+        res = {x: xAns[i].toFixed(1), y: (-1*yAns[0]).toFixed(1)}
       }
     }
     for(let i = 2; i < 4; i++){
       if(xAns[i] <= 54 && xAns[i] >= -54 && yAns[1] <= 32 && yAns[1] >= -32){
-        res = {x: xAns[i].toFixed(1), y: -1*yAns[1].toFixed(1)}
+        res = {x: xAns[i].toFixed(1), y: (-1*yAns[1]).toFixed(1)}
       }
     }
   }
@@ -135,12 +135,12 @@ function threeFlags(pArray) {
         if(err1 - err2 >= 0){
           res = {
             x: xAns[1].toFixed(1),
-            y: -1*yAns[0].toFixed(1)
+            y: (-1*yAns[0]).toFixed(1)
           }
         }else{
           res = {
             x: xAns[0].toFixed(1),
-            y: -1*yAns[0].toFixed(1)
+            y: (-1*yAns[0]).toFixed(1)
           }
         }
       }
@@ -156,12 +156,12 @@ function threeFlags(pArray) {
         if(err1 - err2 >= 0){
           res = {
             x: xAns[1].toFixed(1),
-            y: -1*yAns[0].toFixed(1)
+            y: (-1*yAns[0]).toFixed(1)
           }
         }else{
           res = {
             x: xAns[0].toFixed(1), 
-            y: -1*yAns[0].toFixed(1)
+            y: (-1*yAns[0]).toFixed(1)
           }
         }
       }
@@ -175,12 +175,12 @@ function threeFlags(pArray) {
         if(xAns[0] >= -54 && xAns[0] <= 54){
           res = {
             x: xAns[0].toFixed(1), 
-            y: -1*yAns[0].toFixed(1)
+            y: (-1*yAns[0]).toFixed(1)
           }
         }else{
           res = {
             x: xAns[1].toFixed(1),
-            y: -1*yAns[0].toFixed(1)
+            y: (-1*yAns[0]).toFixed(1)
           }
         }
       }
@@ -196,12 +196,12 @@ function threeFlags(pArray) {
         if(err1 - err2 >= 0){
           res = {
             x: xAns[0].toFixed(1), 
-            y: -1*yAns[1].toFixed(1)
+            y: (-1*yAns[1]).toFixed(1)
           }
         }else{
           res = {
             x: xAns[0].toFixed(1), 
-            y: -1*yAns[0].toFixed(1)
+            y: (-1*yAns[0]).toFixed(1)
           }
         }
       }
@@ -217,12 +217,12 @@ function threeFlags(pArray) {
         if(err1 - err2 > 0){
           res = {
             x: xAns[0].toFixed(1), 
-            y: -1*yAns[1].toFixed(1)
+            y: (-1*yAns[1]).toFixed(1)
           }
         }else{
           res = {
             x: xAns[0].toFixed(1), 
-            y: -1*yAns[0].toFixed(1)
+            y: (-1*yAns[0]).toFixed(1)
           }
         }
       }
@@ -236,12 +236,12 @@ function threeFlags(pArray) {
         if(yAns[0] >= -32 && yAns[0] >= 32){
           res = {
             x: xAns[0].toFixed(1),
-            y: -1*yAns[0].toFixed(1)
+            y: (-1*yAns[0]).toFixed(1)
           }
         }else{
           res = {
             x: xAns[0].toFixed(1),
-            y: -1*yAns[1].toFixed(1)
+            y: (-1*yAns[1]).toFixed(1)
           }
         }
       }

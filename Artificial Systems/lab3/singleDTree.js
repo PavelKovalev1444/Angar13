@@ -82,14 +82,28 @@ const DT = {
   },
   closeBall: {
     condition: (mgr, state) => mgr.getVisible(state.action.goal),
-    trueCond: "ballGoalVisible",
+    trueCond: "checkGoalDistance",
     falseCond: "ballGoalInvisible"
   },
-  ballGoalVisible: {
+  checkGoalDistance: {
+    condition: (mgr, state) => mgr.getDistance(state.action.goal) < 30,
+    trueCond: "strongKick",
+    falseCond: "weakKick"
+  },
+  strongKick: {
     exec(mgr, state){
       state.command = {
         n: "kick",
-        v: `100 ${mgr.getAngle(state.action.goal)}`
+        v: `80 ${mgr.getAngle(state.action.goal)}`
+      }
+    },
+    next: "sendCommand"
+  },
+  weakKick: {
+    exec(mgr, state){
+      state.command = {
+        n: "kick",
+        v: `40 ${mgr.getAngle(state.action.goal)}`
       }
     },
     next: "sendCommand"
@@ -98,7 +112,7 @@ const DT = {
     exec(mgr, state) {
       state.command = {
         n: "kick",
-        v: "10 45"
+        v: "20 45"
       }
     },
     next: "sendCommand"
