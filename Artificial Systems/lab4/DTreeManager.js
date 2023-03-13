@@ -4,9 +4,9 @@ module.exports = {
   getAction(dt, p) {
     this.p = p
     function execute(dt, title, Manager) {
-      if(dt.name === 'doGoal'){
-        console.log('title = ', title)
-      }
+      //if(dt.name === 'doPass'){
+      //  console.log('title = ', title)
+      //}
       const action = dt[title]
       if(typeof action.exec == "function"){
         action.exec(Manager, dt.state)

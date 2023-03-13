@@ -42,6 +42,20 @@ class Agent {
       }
       if (data.msg.includes('kick_off') || data.msg.includes('goal')){
         this.run = false
+        //this.act = {n: "move", v: "-15 10"}
+        if(this.position === 'l' && this.id === 1) {
+          this.socketSend(
+            "move", "-15 -10"
+          )
+          doPassTree.state.next = 0
+          doPassTree.state.kicked = false
+          doPassTree.state.N = 18
+        }else if(this.position === 'l' && this.id === 2){
+          this.socketSend(
+            "move", "-15 10"
+          )
+          doGoalTree.state.next = 0
+        }
       }
     }
     if (data.cmd == "init"){
@@ -64,14 +78,20 @@ class Agent {
   analyzeEnv(msg, cmd, p) {
     if(this.run){
       if(cmd === 'see'){
-        if (this.position === 'l' && this.id === 1) {
+        if(this.position === 'l' && this.id === 1) {
           this.act = DTreeManager.getAction(doPassTree, p)
         }else if(this.position === 'l' && this.id === 2){
           this.act = DTreeManager.getAction(doGoalTree, p)
         }
       }else if(cmd === 'hear'){
         if(this.position === 'l' && this.id === 2){
-          console.log(p)
+          //console.log('hear')
+          //console.log(p)
+          //console.log(p[2])
+          if(p[2] === `"go"`){
+            doGoalTree.state.next = doGoalTree.state.sequence.length - 1
+            doGoalTree.state.action = doGoalTree.state.sequence[doGoalTree.state.next]
+          }
         }
       }
     }

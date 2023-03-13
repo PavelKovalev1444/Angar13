@@ -3,7 +3,7 @@ const PA = "pass"
 const ST = "stay"
 
 const DT = {
-  name: 'pass',
+  name: 'doPass',
   state: {
     N: 18,
     next: 0,
@@ -160,11 +160,11 @@ const DT = {
   },
   kickToComrade: {
     exec(mgr, state){
-      console.log('state.comradeAngle = ', state.comradeAngle)
+      //console.log('state.comradeAngle = ', state.comradeAngle)
       state.kicked = true
       state.command = {
         n: "kick",
-        v: `65 ${state.comradeAngle - 15}`
+        v: `75 ${state.comradeAngle - 20}`
       }
     },
     next: "sendCommand"
@@ -176,7 +176,8 @@ const DT = {
       state.kicked = false
       state.command = {
         n: "say",
-        v: "catch*my*goal*tovarisch"
+        //v: "catch*my*goal*tovarisch"
+        v: "go"
       }
     },
     next: "sendCommand"
