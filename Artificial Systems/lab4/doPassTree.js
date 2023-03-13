@@ -160,11 +160,10 @@ const DT = {
   },
   kickToComrade: {
     exec(mgr, state){
-      //console.log('state.comradeAngle = ', state.comradeAngle)
       state.kicked = true
       state.command = {
         n: "kick",
-        v: `75 ${state.comradeAngle - 20}`
+        v: `85 ${state.comradeAngle - 20}`
       }
     },
     next: "sendCommand"
@@ -176,7 +175,6 @@ const DT = {
       state.kicked = false
       state.command = {
         n: "say",
-        //v: "catch*my*goal*tovarisch"
         v: "go"
       }
     },
@@ -201,7 +199,7 @@ const DT = {
     exec(mgr, state){
       state.command = {
         n: "kick",
-        v: `10 -30`
+        v: `10 -45`
       }
     },
     next: "sendCommand"

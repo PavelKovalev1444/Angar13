@@ -54,7 +54,10 @@ class Agent {
           this.socketSend(
             "move", "-15 10"
           )
+          doGoalTree.state.N = 5
           doGoalTree.state.next = 0
+          doGoalTree.state.prev = -1
+          doGoalTree.state.prevState = null
         }
       }
     }
@@ -89,6 +92,8 @@ class Agent {
           //console.log(p)
           //console.log(p[2])
           if(p[2] === `"go"`){
+            doGoalTree.state.prev = doGoalTree.state.next
+            doGoalTree.state.prevState = doGoalTree.state.sequence[doGoalTree.state.prev]
             doGoalTree.state.next = doGoalTree.state.sequence.length - 1
             doGoalTree.state.action = doGoalTree.state.sequence[doGoalTree.state.next]
           }

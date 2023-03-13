@@ -1,9 +1,13 @@
 const FL = "flag"
 const KI = "kick"
+const RAK = "runAndKick"
 const DT = {
   name: 'doGoal',
   state: {
     next: 0,
+    N: 5,
+    prevState: null,
+    prev: -1,
     sequence: [
       {
         act: FL, 
@@ -17,7 +21,12 @@ const DT = {
         act: KI, 
         fl: "b", 
         goal: "gr"
-      }
+      },
+      {
+        act: RAK, 
+        fl: "b", 
+        goal: "gr"
+      },
     ],
     command: null
   },
@@ -26,7 +35,46 @@ const DT = {
       state.action = state.sequence[state.next]
       state.command = null
     },
-    next: "goalVisible"
+    next: "checkForRak"
+  },
+  checkForRak: {
+    condition: (mgr, state) => state.action.act === RAK,
+    trueCond: "continueToRun",
+    falseCond: "goalVisible"
+  },
+  continueToRun: {
+    condition: (mgr, state) => state.N > 0,
+    trueCond: "runAhead",
+    falseCond: "canSeeBall"
+  },
+  runAhead: {
+    exec(mgr, state) {
+      state.N--
+      state.command = {
+        n: "dash",
+        v: "50"
+      }
+    },
+    next: "sendCommand"
+  },
+  canSeeBall: {
+    condition: (mgr, state) => mgr.getVisible(state.action.fl),
+    trueCond: "startBallSeeking",
+    falseCond: "returnToPrevState"
+  },
+  startBallSeeking: {
+    exec(mgr, state) {
+      state.next--
+      state.action = state.sequence[state.next]
+    },
+    next: "rootNext"
+  },
+  returnToPrevState: {
+    exec(mgr, state) {
+      state.next = state.prev
+      state.action = state.prevState
+    },
+    next: "rootNext"
   },
   goalVisible: {
     condition: (mgr, state) => mgr.getVisible(state.action.fl),
@@ -87,7 +135,7 @@ const DT = {
     exec(mgr, state){
       state.command = {
         n: "dash",
-        v: 90
+        v: 75
       }
     },
     next: "sendCommand"
