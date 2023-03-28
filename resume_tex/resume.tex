@@ -41,10 +41,10 @@
 \usepackage{xcolor}% http://ctan.org/pkg/xcolor
 \usepackage{hyperref}% http://ctan.org/pkg/hyperref
 \hypersetup{
-	colorlinks=true,
-	linkcolor=blue!50!red,
-	linkbordercolor=red,
-	urlcolor=blue!70!black
+  colorlinks=true,
+  linkcolor=blue!50!red,
+  linkbordercolor=red,
+  urlcolor=blue!70!black
 }
 
 \raggedbottom
@@ -53,7 +53,7 @@
 
 % Sections formatting
 \titleformat{\section}{
-	\vspace{-10pt}\scshape\raggedright\large
+  \vspace{-10pt}\scshape\raggedright\large
 }{}{0em}{}[\color{black}\titlerule \vspace{-7pt}]
 
 %-------------------------
@@ -61,9 +61,9 @@
 \def \ifempty#1{\def\temp{#1} \ifx\temp\empty }
 
 \newcommand{\resumeItem}[2]{
-	\item\small{
-		\ifempty{#1}#2\else\textbf{#1}{: #2 \vspace{-2pt}}\fi
-	}
+  \item\small{
+  	\ifempty{#1}#2\else\textbf{#1}{: #2 \vspace{-2pt}}\fi
+  }
 }
 
 \usepackage[dvipsnames]{xcolor}
@@ -85,28 +85,28 @@
 
 
 \newcommand{\resumeSubheading}[4]{
-	\vspace{-1pt}\item
-	\begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
-		\textbf{#1} & \textcolor{mygray}{#2} \\
-		\textit{\small#3} & \textcolor{mygray}{\textit{\small #4}} \\
-	\end{tabular*}\vspace{-5pt}
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textcolor{mygray}{#2} \\
+      \textit{\small#3} & \textcolor{mygray}{\textit{\small #4}} \\
+    \end{tabular*}\vspace{-5pt}
 }
 
 \newcommand{\resumeExpSubheading}[5]{
-	\vspace{-1pt}\item
-	\begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
-		\textbf{#1}  & \textcolor{mygray}{#2} \\
-		\textit{\small#3} & \textcolor{mygray}{\textit{\small #4}} \\
-		{\scriptsize#5}
-	\end{tabular*}\vspace{4pt}
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textbf{#1}  & \textcolor{mygray}{#2} \\
+      \textit{\small#3} & \textcolor{mygray}{\textit{\small #4}} \\
+      {\scriptsize#5}
+    \end{tabular*}\vspace{4pt}
 }
 
 \newcommand{\resumeProjSubheading}[4]{
-	\vspace{-1pt}\item
-	\begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
-		\textbf{#1}  & \textcolor{mygray}{#2} \\
-		\scriptsize {#3} & \textcolor{mygray}{\textit{\small #4}} \\
-	\end{tabular*}\vspace{4pt}
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textbf{#1}  & \textcolor{mygray}{#2} \\
+      \scriptsize {#3} & \textcolor{mygray}{\textit{\small #4}} \\
+    \end{tabular*}\vspace{4pt}
 }
 
 \newcommand{\resumeSubItem}[2]{\resumeItem{#1}{#2}\vspace{-4pt}}
@@ -114,9 +114,9 @@
 \renewcommand{\labelitemii}{$\circ$}
 
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=*]}
-	\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
 \newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.2in]}
-	\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
 
 \usepackage{changepage}
 \newcommand{\resumeDesc}[1]{\begin{adjustwidth}{5pt}{0pt}\vspace{-2pt}{\small{#1}}\end{adjustwidth}}
@@ -126,104 +126,102 @@
 
 
 \begin{document}
-	
-	%----------HEADING-----------------
-	\begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
-		\textbf{\Large Павел Ковалёв} & Email : \href{mailto:Pavel-K16@yandex.ru}{Pavel-K16@yandex.ru}\\
-		Github: \href{https://github.com/PavelKovalev1444}{PavelKovalev1444} & Телефон : +7\hspace{0.5ex}981\hspace{0.5ex}191\hspace{0.5ex}85\hspace{0.5ex}73 \\
-	\end{tabular*}
-	
-	
-	%----------HEADING-----------------
-	\section{Личная информация}
-	\resumeSubHeadingListStart
-	\resumeSubheading
-	{Гражданство:}{Республика Беларусь}
-	{Временная регистрация:}{Санкт-Петербург, Российская Федерация}
-	\resumeSubheading
-	{Ожидаемая зарплатная вилка:}{30-50 тыс. рублей}
-	{Ожидаемая должность:}{Full-stack разработчик, Frontend-разработчик}
-	\resumeSubHeadingListEnd
-	
-	
-	%-----------EDUCATION-----------------
-	\section{Образование}
-	\resumeSubHeadingListStart
-	\resumeSubheading
-	{Санкт-Петербургский государственный электротехнический университет}{Санкт-Петербург, Россия}
-	{Бакалавриат}{Сентябрь 2019 - Август 2023}
-	\resumeSubHeadingListEnd
-	
-	
-	%-----------EXPERIENCE-----------------
-	\section{Опыт}
-	\resumeSubHeadingListStart
-	\resumeExpSubheading
-	{Dell-EMC}{Санкт-Петербург, Россия (удалённо)}
-	{Программист-разработчик}{Январь 2022 - Август 2022}
-	{\skill{C} \skill{HLASM} \skill{z/OS} \skill{REXX} \skill{JCL} \skill{C++}}
-	\resumeDesc{
-		\begin{itemize}
-			\item Разработка анализатора кода, независимого от операционной системы z/OS. Обработка GTF-трассы на языке С, настройка JCL-заданий, постановка SLIP-ловушки в системе для получения трассы.
-	\end{itemize}}    
-	\resumeSubHeadingListEnd
-	
-	\section{Проекты}
-	\resumeSubHeadingListStart
-	
-	\resumeProjSubheading
-	{\href{https://github.com/PavelKovalev1444/estate}{Веб-приложение ``Каталог жилого фонда СПб``}}{}
-	{\skill{React} \skill{JavaScript} \skill{Node.js} \skill{HTML} \skill{CSS}}{Ноябрь. 2022 - Декабрь 2022}
-	\resumeDesc{Веб-приложение, представляющее из себя каталог жилого фонда СПб. Приложение позволяет выгрузить каталог жилого фонда в виде .csv файла, а также загрузить файл с информацией об объектах жилого фонда. Приложение позволяет просмотреть список объектов в виде таблицы, посмотреть их местоположение на карте, а также отображает статистику по жилому фонду. Клиентская часть приложения написана на React, серверная - на Node.js.}
-	
-	\resumeProjSubheading
-	{\href{https://github.com/PavelKovalev1444/VK-test-task}{Сапёр}}{}
-	{\skill{React} \skill{JavaScript} \skill{HTML} \skill{CSS}}{Март 2023 - Апрель 2023 (в процессе)}
-	\resumeDesc{Игра ``Сапёр``, написанная на React.}
-	
-	%    \resumeProjSubheading
-	%      {\href{https://github.com/PavelKovalev1444/music-learning-web-app}{Веб-приложение для изучения музыки}}{}
-	%      {\skill{React} \skill{JavaScript} \skill{HTML} \skill{Node.js} \skill{CSS}}{Март 2023 - май 2023 (в процессе)}
-	%          \resumeDesc{Веб-приложение для изучения музыки. Бакалаврская работа. На данный момент есть только макеты интерфейса.}
-	\resumeSubHeadingListEnd
-	
-	\section{Достижения}
-	\resumeSubHeadingListStart
-	\resumeProjSubheading
-	{Сертификат по немецкому языку}{СПбГЭТУ \"ЛЭТИ\", Санкт-Петербург, Россия}
-	{Срок обучения на курсах немецкого языка:}{Февраль 2022 - Июнь 2022}
-	\resumeDesc{В июне 2022 года были пройдены курсы немецкого языка и был получен сертификат уровня А2.}
-	\resumeSubHeadingListEnd
-	
-	
-	%\section{Достижения}
-	%  \resumeSubHeadingListStart
-	%    \resumeProjSubheading
-	%      {Photo Lab Live Challenge: Go Viral or Go Home - I place [Hackathon]}{Moscow, Russia}
-	%      {\skill{Python} \skill{web.py} \skill{Heroku}}
-	%      {Nov. 2018}
-	%          \resumeDesc{Developed backend for photo filter that changes clothes style, having only 48 hours was able to quickly learn python framework and to deploy MVP.}
-	%  \resumeSubHeadingListEnd
-	
-	
-	%--------PROGRAMMING SKILLS------------
-	\section{Профессиональные навыки}
-	\resumeSubHeadingListStart
-	\item{
-		\textbf{Языки}{: C, JavaScript, TypeScript, Python, SQL, HTML, CSS. }
-	}\vspace{-7pt}
-	\item{
-		\textbf{Технологии}{: SQL, MongoDB, Python, Git, \LaTeX, Docker, React, Vue, Redux, Vuex. }
-	}
-	\vspace{-7pt}
-	\item{
-		\textbf{Общие знания}{: Алгоритмы, Структуры данных, ООП.}
-	}
-	\item{
-		\textbf{Иностранные языки}{: Английский (B2), Немецкий (A1).}
-	}
-	\resumeSubHeadingListEnd
-	
-	
-	%-------------------------------------------
+
+%----------HEADING-----------------
+\begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+  \textbf{\Large Павел Ковалёв} & Email : \href{mailto:Pavel-K16@yandex.ru}{Pavel-K16@yandex.ru}\\
+  Github: \href{https://github.com/PavelKovalev1444}{PavelKovalev1444} & Телефон : +7\hspace{0.5ex}981\hspace{0.5ex}191\hspace{0.5ex}85\hspace{0.5ex}73 \\
+\end{tabular*}
+
+
+%----------HEADING-----------------
+\section{Личная информация}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Гражданство:}{Республика Беларусь}
+      {Временная регистрация:}{Санкт-Петербург, Российская Федерация}
+    \resumeSubheading
+      {Ожидаемая зарплатная вилка:}{30-50 тыс. рублей}
+      {Ожидаемая должность:}{Full-stack разработчик, Frontend-разработчик}
+    \resumeSubheading
+      {Дата рождения:}{12.07.2002}
+      {Возраст:}{20 лет}
+    \resumeProjSubheading
+      {О себе:}{}
+      {\skill{Исполнительный} \skill{Ответственный} \skill{Мотивированный} }{}
+          \resumeDesc{На данный момент заканчиваю обучение в ВУЗе СПбГЭТУ `ЛЭТИ'' по направлению обучения `Программная инженерия''. Хочу развиваться в области Frontend разработки, активно ищу работу.}
+  \resumeSubHeadingListEnd
+
+
+%-----------EDUCATION-----------------
+\section{Образование}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+       {Санкт-Петербургский государственный электротехнический университет}{Санкт-Петербург, Россия}
+      {Бакалавриат}{Сентябрь 2019 - Август 2023}
+  \resumeSubHeadingListEnd
+
+
+%-----------EXPERIENCE-----------------
+\section{Опыт}
+  \resumeSubHeadingListStart
+      \resumeExpSubheading
+      {Dell-EMC}{Санкт-Петербург, Россия (удалённо)}
+      {Программист-разработчик}{Январь 2022 - Август 2022}
+      {\skill{C} \skill{HLASM} \skill{z/OS} \skill{REXX} \skill{JCL} \skill{C++}}
+      \resumeDesc{
+      \begin{itemize}
+          \item Разработка анализатора кода, независимого от операционной системы z/OS. Обработка GTF-трассы на языке С, настройка JCL-заданий, постановка SLIP-ловушки в системе для получения трассы.
+      \end{itemize}}    
+  \resumeSubHeadingListEnd
+
+\section{Проекты}
+  \resumeSubHeadingListStart
+  
+      \resumeProjSubheading
+      {\href{https://github.com/PavelKovalev1444/estate}{Веб-приложение ``Каталог жилого фонда СПб``}}{}
+      {\skill{React} \skill{JavaScript} \skill{Node.js} \skill{HTML} \skill{CSS}}{Ноябрь. 2022 - Декабрь 2022}
+          \resumeDesc{Веб-приложение, представляющее из себя каталог жилого фонда СПб. Приложение позволяет выгрузить каталог жилого фонда в виде .csv файла, а также загрузить файл с информацией об объектах жилого фонда. Приложение позволяет просмотреть список объектов в виде таблицы, посмотреть их местоположение на карте, а также отображает статистику по жилому фонду. Клиентская часть приложения написана на React, серверная - на Node.js.}
+  
+    \resumeProjSubheading
+      {\href{https://github.com/PavelKovalev1444/VK-test-task}{Сапёр}}{}
+      {\skill{React} \skill{JavaScript} \skill{HTML} \skill{CSS}}{Март 2023 - Апрель 2023 (в процессе)}
+          \resumeDesc{Игра ``Сапёр``, написанная на React.}
+    
+%    \resumeProjSubheading
+%      {\href{https://github.com/PavelKovalev1444/music-learning-web-app}{Веб-приложение для изучения музыки}}{}
+%      {\skill{React} \skill{JavaScript} \skill{HTML} \skill{Node.js} \skill{CSS}}{Март 2023 - май 2023 (в процессе)}
+%          \resumeDesc{Веб-приложение для изучения музыки. Бакалаврская работа. На данный момент есть только макеты интерфейса.}
+  \resumeSubHeadingListEnd
+
+\section{Достижения}
+  \resumeSubHeadingListStart
+    \resumeProjSubheading
+      {Сертификат по немецкому языку}{СПбГЭТУ `ЛЭТИ'', Санкт-Петербург, Россия}
+      {Срок обучения на курсах немецкого языка:}{Февраль 2022 - Июнь 2022}
+          \resumeDesc{В июне 2022 года были пройдены курсы немецкого языка и был получен сертификат уровня А2.}
+  \resumeSubHeadingListEnd
+
+
+%--------PROGRAMMING SKILLS------------
+\section{Профессиональные навыки}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Языки}{: C, JavaScript, TypeScript, Python, SQL, HTML, CSS. }
+   }\vspace{-7pt}
+   \item{
+     \textbf{Технологии}{: SQL, MongoDB, Python, Git, \LaTeX, Docker, React, Vue, Redux, Vuex. }
+   }
+   \vspace{-7pt}
+   \item{
+     \textbf{Общие знания}{: Алгоритмы, Структуры данных, ООП.}
+   }
+   \vspace{-7pt}
+   \item{
+     \textbf{Иностранные языки}{: Английский (B2), Немецкий (A1).}
+   }
+ \resumeSubHeadingListEnd
+
+
+%-------------------------------------------
 \end{document}
