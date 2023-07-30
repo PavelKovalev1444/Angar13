@@ -9,7 +9,10 @@
     "express-generator": "^4.16.1",
     "pug": "^2.0.0-rc.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.4.5",
+    "typescript": "^5.1.6"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
