@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "ES2020",
+    "moduleResolution": "node",
+    "strict": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src/*", "src/**/*"],
+}
