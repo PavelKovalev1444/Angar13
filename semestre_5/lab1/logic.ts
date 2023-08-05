@@ -11,9 +11,11 @@ let points = 0;
 let inter;
 let timer = 1300;
 
-document.getElementById("player_name").innerHTML = playerName;
-document.getElementById("current_level").innerHTML = curLevel;
-document.getElementById("points").innerHTML = points;
+if (document.getElementById("player_name")) {
+	document.getElementById("player_name").innerHTML = playerName
+} 
+document.getElementById("current_level")?.innerHTML = curLevel + '';
+document.getElementById("points")?.innerHTML = points + '';
 
 var rows = 24;
 var cols = 16;
