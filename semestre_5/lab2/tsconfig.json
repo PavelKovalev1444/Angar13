@@ -2,8 +2,10 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es5",
-    "sourceMap": true
+    "sourceMap": true,
+    "alwaysStrict": true,
   },
+  "include": ["app.ts", "public/ajax/ajax.ts"],
   "exclude": [
     "node_modules"
   ]
