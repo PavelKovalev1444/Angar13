@@ -1,10 +1,9 @@
 function store(){
-	var input = document.getElementById("inputUsername");
-	var username = input.value;
+	let username = document.getElementById("inputUsername")?.value;
 	if(username == ""){
 		window.alert("Input your username!");
 	}else{
-		localStorage["tetris.username"] = input.value;
+		localStorage["tetris.username"] = document.getElementById("inputUsername").value;
 		window.location.href = "./main.html";
 	}	
 }
@@ -12,7 +11,6 @@ function store(){
 function read(){
 	if(localStorage.hasOwnProperty("tetris.username")){
 		let username = localStorage.getItem("tetris.username");
-        let input = document.getElementById("inputUsername");
-        input.value = username;
+		document.getElementById("inputUsername").value = username;
 	}
 }
